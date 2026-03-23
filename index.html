@@ -15,65 +15,106 @@
 *{margin:0;padding:0;box-sizing:border-box;}
 body{font-family:'Barlow',sans-serif;background:linear-gradient(135deg,#0d0d2b,#1a1a3e);display:flex;justify-content:center;align-items:flex-start;min-height:100vh;padding:20px;}
 .phone-frame{width:390px;min-height:844px;background:var(--navy);border-radius:40px;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,.7),inset 0 1px 0 rgba(255,255,255,.1);}
+/* En móvil, cuando supervisor está activo, phone-frame se expande */
+body.sup-mode{padding:0;align-items:stretch;background:#0b0e2e;}
+body.sup-mode .phone-frame{width:100%;min-height:100vh;border-radius:0;box-shadow:none;display:contents;}
 .screen{display:none;flex-direction:column;min-height:844px;animation:fadeIn .3s ease;}
 .screen.active{display:flex;}
 @keyframes fadeIn{from{opacity:0;transform:translateX(8px)}to{opacity:1;transform:none}}
 
-/* ══ DESKTOP LAYOUT (1200px+) ══ */
-@media(min-width:1200px){
+/* ══ SUPERVISOR LAYOUT — funciona en MÓVIL y PC ══ */
+
+/* Componentes del panel supervisor — siempre visibles */
+.desk-side{display:none;}
+.desk-main{display:flex;flex-direction:column;flex:1;overflow:hidden;min-height:0;}
+.desk-topbar{background:var(--navy-dark);padding:0 16px;height:52px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(74,159,212,.15);flex-shrink:0;}
+.desk-pagetitle{font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:800;color:#fff;letter-spacing:1.5px;text-transform:uppercase;}
+.desk-clock{font-size:13px;font-weight:700;color:var(--cyan);font-family:monospace;}
+.desk-scroll{flex:1;overflow-y:auto;padding:16px;}
+.desk-scroll::-webkit-scrollbar{width:3px;}
+.desk-scroll::-webkit-scrollbar-thumb{background:rgba(74,159,212,.3);border-radius:4px;}
+.desk-card{background:var(--card-bg);border-radius:12px;border:1px solid rgba(74,159,212,.2);padding:16px;margin-bottom:16px;}
+.desk-card-title{font-size:11px;font-weight:800;color:var(--cyan);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:14px;padding-bottom:9px;border-bottom:1px solid rgba(74,159,212,.15);}
+.desk-stat{background:var(--card-bg);border-radius:12px;border:1px solid rgba(74,159,212,.2);padding:16px 18px;}
+.desk-stat-num{font-size:32px;font-weight:900;color:#fff;line-height:1;}
+.desk-stat-lbl{font-size:9px;font-weight:800;color:var(--cyan-light);letter-spacing:1px;margin-top:5px;text-transform:uppercase;}
+.desk-savebar{background:var(--navy-dark);padding:12px 16px;display:flex;justify-content:flex-end;gap:10px;border-top:1px solid rgba(74,159,212,.15);flex-shrink:0;}
+.desk-savebtn{padding:10px 22px;border:none;border-radius:8px;font-size:13px;font-weight:800;cursor:pointer;letter-spacing:.8px;}
+.desk-savebtn.primary{background:linear-gradient(135deg,var(--blue-btn),var(--blue-btn-light));color:#fff;}
+.desk-savebtn.secondary{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.2);color:#fff;}
+.desk-list-item{background:rgba(255,255,255,.05);border:1px solid rgba(74,159,212,.15);border-radius:9px;padding:11px 13px;display:flex;align-items:center;gap:10px;}
+/* Grid responsivo: 1 col en móvil, 2 en tablet+ */
+.desk-4col{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:16px;}
+.desk-2col{display:grid;grid-template-columns:1fr;gap:16px;}
+.desk-3col{display:grid;grid-template-columns:1fr;gap:14px;}
+/* Nav inferior para supervisor en móvil */
+.sup-mobile-nav{display:flex;position:fixed;bottom:0;left:0;right:0;background:rgba(5,8,50,.97);border-top:1px solid rgba(74,159,212,.2);z-index:150;backdrop-filter:blur(12px);}
+.sup-mobile-nav button{flex:1;padding:10px 4px 8px;background:none;border:none;color:rgba(255,255,255,.5);font-size:9px;font-weight:700;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;letter-spacing:.3px;transition:color .2s;}
+.sup-mobile-nav button span.ico{font-size:20px;line-height:1;}
+.sup-mobile-nav button.act{color:var(--cyan);}
+/* Ocultar elementos móviles en supervisor */
+#s-dash .hdr,#s-regusr .hdr,#s-regcli .hdr,#s-ruta .hdr,#s-rep .hdr,#s-ajustes .hdr,
+#s-dash .sub,#s-regusr .sub,#s-regcli .sub,#s-ruta .sub,#s-rep .sub,#s-ajustes .sub{display:none!important;}
+#s-regusr .sf,#s-regcli .sf,#s-ruta .sf,#s-rep .sf,#s-ajustes .sf{display:none!important;}
+#s-regusr .sb,#s-regcli .sb,#s-ruta .sb,#s-rep .sb,#s-ajustes .sb{overflow:visible;flex:none;}
+#s-dash .sb{overflow:visible;flex:none;}
+#super-overlay,#super-drawer{display:none!important;}
+.desk-scroll .fc{padding:0;}
+/* Screens supervisor ocupan todo el viewport */
+#s-dash,#s-regusr,#s-regcli,#s-ruta,#s-rep,#s-ajustes,#s-super{
+  position:fixed;inset:0;display:none;flex-direction:column;background:#0b0e2e;
+  animation:none;border-radius:0;min-height:100vh;padding-bottom:58px;
+}
+#s-dash.active,#s-regusr.active,#s-regcli.active,#s-ruta.active,
+#s-rep.active,#s-ajustes.active,#s-super.active{display:flex;}
+/* Login / user / fin siguen como modal centrado */
+#s-login,#s-user,#s-fin{
+  min-height:844px;background:var(--navy);
+}
+/* Badge en tiempo real */
+.badge-live{display:inline-flex;align-items:center;gap:4px;background:rgba(34,197,94,.15);border:1px solid rgba(34,197,94,.3);border-radius:12px;padding:3px 9px;font-size:10px;font-weight:700;color:var(--green);}
+.badge-live::before{content:'';width:7px;height:7px;border-radius:50%;background:var(--green);animation:pulse 1.5s infinite;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.5;transform:scale(1.3);}}
+
+/* ══ TABLET 640px+ ══ */
+@media(min-width:640px){
+  .desk-4col{grid-template-columns:repeat(4,1fr);gap:14px;}
+  .desk-2col{grid-template-columns:1fr 1fr;}
+  .desk-3col{grid-template-columns:1fr 1fr 1fr;}
+  .desk-scroll{padding:20px 24px;}
+  .desk-stat-num{font-size:38px;}
+}
+
+/* ══ DESKTOP 1024px+ — sidebar lateral ══ */
+@media(min-width:1024px){
   body{padding:0;align-items:stretch;background:#0b0e2e;}
   .phone-frame{display:contents;}
   #s-dash,#s-regusr,#s-regcli,#s-ruta,#s-rep,#s-ajustes,#s-super{
-    position:fixed;inset:0;display:none;flex-direction:row;min-height:100vh;border-radius:0;
-    background:#0b0e2e;animation:none;
+    flex-direction:row;padding-bottom:0;
   }
-  #s-dash.active,#s-regusr.active,#s-regcli.active,#s-ruta.active,
-  #s-rep.active,#s-ajustes.active,#s-super.active{display:flex;}
   #s-login,#s-user,#s-fin{
-    min-height:844px;border-radius:40px;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);
-    width:390px;box-shadow:0 30px 80px rgba(0,0,0,.7);z-index:10;
+    min-height:844px;border-radius:40px;position:fixed;top:50%;left:50%;
+    transform:translate(-50%,-50%);width:390px;box-shadow:0 30px 80px rgba(0,0,0,.7);z-index:10;
+    background:var(--navy);
   }
-  .desk-side{width:240px;flex-shrink:0;background:var(--navy-dark);display:flex;flex-direction:column;border-right:1px solid rgba(74,159,212,.15);}
-  .desk-logo{padding:22px 20px 18px;border-bottom:1px solid rgba(74,159,212,.15);}
+  .desk-side{width:230px;flex-shrink:0;background:var(--navy-dark);display:flex;flex-direction:column;border-right:1px solid rgba(74,159,212,.15);}
+  .desk-logo{padding:20px 18px 16px;border-bottom:1px solid rgba(74,159,212,.15);}
   .desk-logo .logo-box{margin-bottom:8px;display:inline-flex;}
-  .desk-app{font-family:'Barlow Condensed',sans-serif;font-size:19px;font-weight:800;color:#fff;letter-spacing:2px;margin-top:5px;}
+  .desk-app{font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:800;color:#fff;letter-spacing:2px;margin-top:5px;}
   .desk-user-lbl{font-size:11px;color:var(--cyan-light);margin-top:2px;}
-  .desk-nav{flex:1;padding:12px 0;overflow-y:auto;}
-  .dnav-item{display:flex;align-items:center;gap:11px;padding:12px 20px;cursor:pointer;color:rgba(255,255,255,.55);font-size:13px;font-weight:700;letter-spacing:.4px;transition:all .2s;border-left:3px solid transparent;}
+  .desk-nav{flex:1;padding:10px 0;overflow-y:auto;}
+  .dnav-item{display:flex;align-items:center;gap:11px;padding:11px 18px;cursor:pointer;color:rgba(255,255,255,.55);font-size:13px;font-weight:700;letter-spacing:.4px;transition:all .2s;border-left:3px solid transparent;}
   .dnav-item:hover{background:rgba(74,159,212,.1);color:#fff;}
   .dnav-item.act{background:rgba(74,159,212,.18);color:var(--cyan);border-left-color:var(--cyan);}
-  .dnav-item .dnico{font-size:18px;width:22px;text-align:center;flex-shrink:0;}
-  .desk-foot{padding:14px 20px;border-top:1px solid rgba(74,159,212,.15);}
+  .dnav-item .dnico{font-size:17px;width:22px;text-align:center;flex-shrink:0;}
+  .desk-foot{padding:13px 18px;border-top:1px solid rgba(74,159,212,.15);}
   .desk-foot button{width:100%;padding:9px;background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.3);border-radius:8px;color:var(--red);font-size:12px;font-weight:700;cursor:pointer;letter-spacing:.5px;}
-  .desk-main{flex:1;display:flex;flex-direction:column;overflow:hidden;}
-  .desk-topbar{background:var(--navy-dark);padding:0 28px;height:58px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(74,159,212,.15);flex-shrink:0;}
-  .desk-pagetitle{font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:800;color:#fff;letter-spacing:2px;text-transform:uppercase;}
-  .desk-clock{font-size:14px;font-weight:700;color:var(--cyan);font-family:monospace;}
-  .desk-scroll{flex:1;overflow-y:auto;padding:28px 32px;}
-  .desk-scroll::-webkit-scrollbar{width:4px;}
-  .desk-scroll::-webkit-scrollbar-thumb{background:rgba(74,159,212,.3);border-radius:4px;}
-  .desk-4col{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-bottom:24px;}
-  .desk-2col{display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:start;}
-  .desk-3col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px;align-items:start;}
-  .desk-card{background:var(--card-bg);border-radius:12px;border:1px solid rgba(74,159,212,.2);padding:20px;}
-  .desk-card-title{font-size:11px;font-weight:800;color:var(--cyan);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid rgba(74,159,212,.15);}
-  .desk-stat{background:var(--card-bg);border-radius:12px;border:1px solid rgba(74,159,212,.2);padding:22px 24px;}
-  .desk-stat-num{font-size:40px;font-weight:900;color:#fff;line-height:1;}
-  .desk-stat-lbl{font-size:10px;font-weight:800;color:var(--cyan-light);letter-spacing:1px;margin-top:6px;text-transform:uppercase;}
-  .desk-savebar{background:var(--navy-dark);padding:14px 32px;display:flex;justify-content:flex-end;gap:12px;border-top:1px solid rgba(74,159,212,.15);flex-shrink:0;}
-  .desk-savebtn{padding:10px 30px;border:none;border-radius:8px;font-size:13px;font-weight:800;cursor:pointer;letter-spacing:1px;}
-  .desk-savebtn.primary{background:linear-gradient(135deg,var(--blue-btn),var(--blue-btn-light));color:#fff;}
-  .desk-savebtn.secondary{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.2);color:#fff;}
-  .desk-list-item{background:rgba(255,255,255,.05);border:1px solid rgba(74,159,212,.15);border-radius:9px;padding:12px 14px;display:flex;align-items:center;gap:10px;}
-  .desk-list-item:hover{background:rgba(74,159,212,.08);}
-  #s-dash .hdr,#s-regusr .hdr,#s-regcli .hdr,#s-ruta .hdr,#s-rep .hdr,#s-ajustes .hdr,
-  #s-dash .sub,#s-regusr .sub,#s-regcli .sub,#s-ruta .sub,#s-rep .sub,#s-ajustes .sub,
-  #s-regusr .sf,#s-regcli .sf,#s-ruta .sf,#s-rep .sf,#s-ajustes .sf{display:none!important;}
-  #s-regusr .sb,#s-regcli .sb,#s-ruta .sb,#s-rep .sb,#s-ajustes .sb{overflow:visible;flex:none;}
-  #s-dash .sb{overflow:visible;flex:none;}
-  #super-overlay,#super-drawer{display:none!important;}
-  .desk-scroll .fc{padding:0;}
-  .desk-scroll .finput,.desk-scroll .fsel,.desk-scroll .fta{font-size:13px;}
+  .desk-main{flex:1;overflow:hidden;}
+  .desk-topbar{height:58px;padding:0 28px;}
+  .desk-pagetitle{font-size:22px;}
+  .desk-scroll{padding:28px 32px;}
+  .desk-stat-num{font-size:40px;}
+  .sup-mobile-nav{display:none!important;}
 }
 /* HEADER */
 .hdr{display:flex;align-items:center;justify-content:space-between;padding:13px 17px;background:var(--navy-dark);flex-shrink:0;}
@@ -299,7 +340,10 @@ body{font-family:'Barlow',sans-serif;background:linear-gradient(135deg,#0d0d2b,#
   <div class="desk-main">
     <div class="desk-topbar">
       <div class="desk-pagetitle">Dashboard</div>
-      <div class="desk-clock" id="desk-clock">--:--</div>
+      <div style="display:flex;align-items:center;gap:12px;">
+        <span class="badge-live" id="sync-badge" style="opacity:0;transition:opacity .4s;">SINCRONIZADO</span>
+        <div class="desk-clock" id="desk-clock">--:--</div>
+      </div>
     </div>
     <div class="desk-scroll sb">
       <div class="desk-4col">
@@ -671,6 +715,16 @@ body{font-family:'Barlow',sans-serif;background:linear-gradient(135deg,#0d0d2b,#
 
 </div><!-- /phone-frame -->
 
+<!-- ══ NAV INFERIOR SUPERVISOR (móvil) ══ -->
+<nav class="sup-mobile-nav" id="sup-mob-nav" style="display:none;">
+  <button onclick="nav('s-dash')" id="smn-dash"><span class="ico">📊</span>Dashboard</button>
+  <button onclick="nav('s-regusr')" id="smn-usr"><span class="ico">👤</span>Usuarios</button>
+  <button onclick="nav('s-regcli')" id="smn-cli"><span class="ico">🏪</span>Clientes</button>
+  <button onclick="nav('s-ruta')" id="smn-ruta"><span class="ico">🗺️</span>Rutas</button>
+  <button onclick="nav('s-rep')" id="smn-rep"><span class="ico">📈</span>Reportes</button>
+  <button onclick="nav('s-ajustes')" id="smn-aj"><span class="ico">⚙️</span>Ajustes</button>
+</nav>
+
 <!-- ══ MENÚ SUPERVISOR (DRAWER) ══ -->
 <div id="super-overlay" style="display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.55);" onclick="closeSuperMenu()"></div>
 <div id="super-drawer" style="display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:201;background:var(--navy-dark);border-radius:18px;width:340px;padding:0;box-shadow:0 20px 60px rgba(0,0,0,.7);border:1px solid rgba(74,159,212,.25);overflow:hidden;">
@@ -690,7 +744,124 @@ body{font-family:'Barlow',sans-serif;background:linear-gradient(135deg,#0d0d2b,#
 
 
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
+// ════════════════════════════════════════
+//  SUPABASE CONFIG
+// ════════════════════════════════════════
+const SUPA_URL = 'https://sxkizjpgazczdkiageal.supabase.co';
+const SUPA_KEY = 'sb_publishable_UtG0ELBTa6HCbj-goThb7A_MRv8A11o';
+const db = supabase.createClient(SUPA_URL, SUPA_KEY);
+
+// Carga datos desde Supabase al iniciar
+async function loadFromDB() {
+  showToast('Cargando datos...', 'ok');
+  try {
+    const [{ data: users }, { data: clients }, { data: routes }, { data: visits }, { data: aj }] = await Promise.all([
+      db.from('usuarios').select('*'),
+      db.from('clientes').select('*'),
+      db.from('rutas').select('*'),
+      db.from('visitas').select('*'),
+      db.from('ajustes').select('*').eq('id', 1).single(),
+    ]);
+    if (users?.length)   S.users   = users.map(u=>({...u, online:false, loginTime:null, store:null}));
+    if (clients?.length) S.clients = clients;
+    if (routes?.length)  S.routes  = routes.map(r=>({...r, alms: r.alms||[]}));
+    if (visits?.length)  S.visits  = visits;
+    if (aj) { S.aj.res = aj.res||S.aj.res; S.aj.acts = aj.acts||S.aj.acts; }
+    showToast('Datos cargados ✓');
+  } catch(e) {
+    showToast('Sin conexión — modo local', 'err');
+  }
+}
+
+// Guarda usuario en Supabase
+async function saveToDB_user(u) {
+  const { error } = await db.from('usuarios').upsert({
+    id: u.id, nom: u.nom, usr: u.usr, pw: u.pw,
+    zona: u.zona, rol: u.rol, tel: u.tel||''
+  });
+  if (error) showToast('Error guardando usuario', 'err');
+}
+
+// Guarda cliente en Supabase
+async function saveToDB_client(c) {
+  const { error } = await db.from('clientes').upsert({
+    id: c.id, nom: c.nom, alm: c.alm,
+    dir: c.dir, ciu: c.ciu, zona: c.zona, tel: c.tel||''
+  });
+  if (error) showToast('Error guardando cliente', 'err');
+}
+
+// Guarda ruta en Supabase
+async function saveToDB_route(r) {
+  const { error } = await db.from('rutas').upsert({
+    id: r.id, uid: r.uid, zona: r.zona, alms: r.alms
+  });
+  if (error) showToast('Error guardando ruta', 'err');
+}
+
+// Borra ruta de Supabase
+async function deleteToDB_route(rid) {
+  await db.from('rutas').delete().eq('id', rid);
+}
+
+// Guarda visita en Supabase
+async function saveToDB_visit(v) {
+  const { error } = await db.from('visitas').upsert({
+    id: v.id, uid: v.uid, cid: v.cid, cn: v.cn,
+    ca: v.ca, zona: v.zona, res: v.res, act: v.act,
+    obs: v.obs, status: v.status, elapsed: v.elapsed,
+    starttime: v.startTime, endtime: v.endTime
+  });
+  if (error) showToast('Error guardando visita', 'err');
+}
+
+// ── SYNC EN TIEMPO REAL vía Supabase Realtime ──
+function startRealtimeSync() {
+  // Escucha cambios en visitas (usuario → supervisor)
+  db.channel('visitas-live')
+    .on('postgres_changes', { event: '*', schema: 'public', table: 'visitas' }, payload => {
+      const v = payload.new || payload.old;
+      if (!v) return;
+      if (payload.eventType === 'DELETE') {
+        S.visits = S.visits.filter(x => x.id !== v.id);
+      } else {
+        const idx = S.visits.findIndex(x => x.id === v.id);
+        const mapped = { id:v.id, uid:v.uid, cid:v.cid, cn:v.cn, ca:v.ca,
+          zona:v.zona, res:v.res, act:v.act, obs:v.obs,
+          status:v.status, elapsed:v.elapsed||0,
+          startTime:v.starttime, endTime:v.endtime, ts:null };
+        if (idx >= 0) S.visits[idx] = { ...S.visits[idx], ...mapped };
+        else S.visits.push(mapped);
+      }
+      // Actualiza UI si el dashboard está visible
+      if (document.getElementById('s-dash').classList.contains('active')) renderDash();
+      if (document.getElementById('s-user').classList.contains('active')) renderUP();
+      // Indicador visual de sincronización
+      showSyncPulse();
+    })
+    .subscribe();
+
+  // Escucha cambios en usuarios (estado online)
+  db.channel('usuarios-live')
+    .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'usuarios' }, payload => {
+      const u = payload.new;
+      const local = S.users.find(x => x.id === u.id);
+      if (local) Object.assign(local, { nom:u.nom, usr:u.usr, zona:u.zona, rol:u.rol });
+      if (document.getElementById('s-dash').classList.contains('active')) renderDash();
+    })
+    .subscribe();
+}
+
+function showSyncPulse() {
+  const el = document.getElementById('sync-badge');
+  if (!el) return;
+  el.style.opacity = '1';
+  clearTimeout(el._t);
+  el._t = setTimeout(() => { el.style.opacity = '0'; }, 2000);
+}
+
 // ════════════════════════════════════════
 //  GLOBAL STATE
 // ════════════════════════════════════════
@@ -734,15 +905,33 @@ function closeSuperMenu(){
 }
 
 // ── NAV ──
+const SUP_SCREENS = ['s-dash','s-regusr','s-regcli','s-ruta','s-rep','s-ajustes','s-super'];
+const SUP_NAV_MAP = {'s-dash':'smn-dash','s-regusr':'smn-usr','s-regcli':'smn-cli','s-ruta':'smn-ruta','s-rep':'smn-rep','s-ajustes':'smn-aj'};
+
 function nav(id) {
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   const sc=document.getElementById(id);
   if(sc) sc.classList.add('active');
+
+  // Supervisor mode: expand to full screen on mobile
+  const isSup = SUP_SCREENS.includes(id);
+  document.body.classList.toggle('sup-mode', isSup);
+  const mobNav = document.getElementById('sup-mob-nav');
+  if(mobNav) mobNav.style.display = isSup ? 'flex' : 'none';
+
+  // Highlight mobile nav button
+  document.querySelectorAll('.sup-mobile-nav button').forEach(b=>b.classList.remove('act'));
+  if(SUP_NAV_MAP[id]){
+    const btn=document.getElementById(SUP_NAV_MAP[id]);
+    if(btn) btn.classList.add('act');
+  }
+
   // Sync sidebar active state on all screens
   document.querySelectorAll('.dnav-item').forEach(el=>{
     el.classList.remove('act');
     if(el.getAttribute('onclick')&&el.getAttribute('onclick').includes("'"+id+"'"))el.classList.add('act');
   });
+
   if(id==='s-dash')    renderDash();
   if(id==='s-ruta')    initRutaSelects();
   if(id==='s-regusr')  renderUL();
@@ -777,13 +966,22 @@ function doLogin() {
   if(!user){document.getElementById('lerr').style.display='block';return;}
   document.getElementById('lerr').style.display='none';
   user.online=true; user.loginTime=Date.now(); S.cu=user;
+  // Marcar online en Supabase
+  db.from('usuarios').update({online:true, login_time: new Date().toISOString()}).eq('id',user.id).then(()=>{});
+  startRealtimeSync();
   if(user.rol==='Supervisor'||user.rol==='Admin'){renderDash();nav('s-dash');}
   else{assignVisits(user);renderUP();nav('s-user');}
   showToast('Bienvenido, '+user.nom.split(' ')[0]+'!');
 }
 function doLogout(){
-  if(S.cu){S.cu.online=false;S.cu.store=null;S.cu.loginTime=null;S.cu=null;}
+  if(S.cu){
+    db.from('usuarios').update({online:false}).eq('id',S.cu.id).then(()=>{});
+    S.cu.online=false;S.cu.store=null;S.cu.loginTime=null;S.cu=null;
+  }
   S.activeVid=null;
+  document.body.classList.remove('sup-mode');
+  const mobNav=document.getElementById('sup-mob-nav');
+  if(mobNav) mobNav.style.display='none';
   document.getElementById('li-u').value='';
   document.getElementById('li-p').value='';
   nav('s-login'); showToast('Sesión cerrada');
@@ -849,9 +1047,11 @@ function startV(vid) {
   const v=S.visits.find(x=>x.id===vid); if(!v)return;
   S.visits.filter(x=>x.uid===S.cu.id&&x.status==='active').forEach(x=>{
     x.elapsed+=(Date.now()-(x.ts||Date.now())); x.status='pending'; x.ts=null;
+    saveToDB_visit(x);
   });
   v.status='active'; v.startTime=Date.now(); v.ts=Date.now();
   S.activeVid=vid; S.cu.store=v.cn;
+  saveToDB_visit(v);
   renderUP(); showToast('Visita iniciada: '+v.cn);
 }
 function prepFin(vid) {
@@ -872,7 +1072,8 @@ function doFinalizar() {
   if(!res||!act){showToast('Selecciona resultado y actividad','err');return;}
   const v=S.visits.find(x=>x.id===S.activeVid);
   if(v){v.res=res;v.act=act;v.obs=obs;v.endTime=Date.now();
-    v.elapsed+=(Date.now()-(v.ts||Date.now()));v.ts=null;v.status='completed';}
+    v.elapsed+=(Date.now()-(v.ts||Date.now()));v.ts=null;v.status='completed';
+    saveToDB_visit(v);}
   if(S.cu)S.cu.store=null;
   S.activeVid=null;
   showToast('Visita finalizada ✓');
@@ -1026,7 +1227,9 @@ function doRegUsr(){
     showToast('Usuario "'+usr+'" actualizado ✓');
   } else {
     if(S.users.find(u=>u.usr===usr)){showToast('Usuario ya existe','err');return;}
-    S.users.push({id:S.users.length+1,nom,usr,pw,zona,rol,dias,horarios,online:false,loginTime:null,store:null,active:true});
+    const newU={id:Date.now(),nom,usr,pw,zona,rol,dias,horarios,online:false,loginTime:null,store:null,active:true};
+    S.users.push(newU);
+    saveToDB_user(newU);
     showToast('Usuario "'+usr+'" creado ✓');
   }
   ['ru-nom','ru-usr','ru-pw'].forEach(id=>document.getElementById(id).value='');
@@ -1081,12 +1284,14 @@ function doRegCli(){
   if(!nom||!alm||!dir||!ciu||!zona){showToast('Completa todos los campos','err');return;}
   if(S._editCid){
     const c=S.clients.find(x=>x.id===S._editCid);
-    if(c){Object.assign(c,{nom,alm,dir,ciu,zona});}
+    if(c){Object.assign(c,{nom,alm,dir,ciu,zona}); saveToDB_client(c);}
     S._editCid=null;
     document.querySelector('#s-regcli .slbl').textContent='GUARDAR REGISTRO';
     showToast('Cliente "'+alm+'" actualizado ✓');
   } else {
-    S.clients.push({id:Date.now(),nom,alm,dir,ciu,zona});
+    const newC={id:Date.now(),nom,alm,dir,ciu,zona};
+    S.clients.push(newC);
+    saveToDB_client(newC);
     showToast('Cliente "'+alm+'" registrado ✓');
   }
   ['rc-nom','rc-alm','rc-dir'].forEach(id=>document.getElementById(id).value='');
@@ -1176,7 +1381,7 @@ function doRegRuta(){
   } else {
     const ex=S.routes.find(r=>r.uid===uid);
     if(ex){ex.zona=zona;ex.alms=alms;}
-    else S.routes.push({id:Date.now(),uid,zona,alms});
+    else { const newR={id:Date.now(),uid,zona,alms}; S.routes.push(newR); saveToDB_route(newR); }
     showToast('Ruta guardada ✓');
   }
   document.getElementById('rt-items').innerHTML='';
@@ -1214,6 +1419,7 @@ function editRoute(rid){
 }
 function deleteRoute(rid){
   S.routes=S.routes.filter(x=>x.id!==rid);
+  deleteToDB_route(rid);
   showToast('Ruta eliminada');
   renderSaved();
 }
@@ -1268,6 +1474,8 @@ function doSaveAj(){syncAj();showToast('Ajustes guardados ✓');}
 // ── INIT ──
 renderUL(); renderCL();
 resetHorarios();
+// Load data from Supabase on startup
+loadFromDB().then(()=>{ renderUL(); renderCL(); renderSaved && renderSaved(); });
 </script>
 </body>
 </html>
