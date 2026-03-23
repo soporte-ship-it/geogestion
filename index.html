@@ -64,6 +64,19 @@ body.sup-mode .phone-frame{width:100%;min-height:100vh;border-radius:0;box-shado
 #s-dash,#s-regusr,#s-regcli,#s-ruta,#s-rep,#s-ajustes,#s-super{
   position:fixed;inset:0;display:none;flex-direction:column;background:#0b0e2e;
   animation:none;border-radius:0;min-height:100vh;padding-bottom:58px;
+  overflow:hidden;
+}
+#s-dash.active,#s-regusr.active,#s-regcli.active,#s-ruta.active,
+#s-rep.active,#s-ajustes.active,#s-super.active{display:flex;}
+/* desk-main debe ocupar el espacio restante y permitir scroll interno */
+#s-dash .desk-main,#s-regusr .desk-main,#s-regcli .desk-main,
+#s-ruta .desk-main,#s-rep .desk-main,#s-ajustes .desk-main{
+  flex:1;min-height:0;display:flex;flex-direction:column;overflow:hidden;
+}
+/* El scroll-area dentro de desk-main */
+#s-dash .desk-scroll,#s-regusr .desk-scroll,#s-regcli .desk-scroll,
+#s-ruta .desk-scroll,#s-rep .desk-scroll,#s-ajustes .desk-scroll{
+  flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;min-height:0;
 }
 #s-dash.active,#s-regusr.active,#s-regcli.active,#s-ruta.active,
 #s-rep.active,#s-ajustes.active,#s-super.active{display:flex;}
@@ -339,10 +352,13 @@ body.sup-mode .phone-frame{width:100%;min-height:100vh;border-radius:0;box-shado
   <!-- DESKTOP main -->
   <div class="desk-main">
     <div class="desk-topbar">
-      <div class="desk-pagetitle">Dashboard</div>
-      <div style="display:flex;align-items:center;gap:12px;">
-        <span class="badge-live" id="sync-badge" style="opacity:0;transition:opacity .4s;">SINCRONIZADO</span>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <div class="desk-pagetitle">Dashboard</div>
+        <span class="badge-live" id="sync-badge" style="opacity:0;transition:opacity .4s;">● EN VIVO</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;">
         <div class="desk-clock" id="desk-clock">--:--</div>
+        <button onclick="doLogout()" style="padding:6px 13px;background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.3);border-radius:8px;color:var(--red);font-size:11px;font-weight:700;cursor:pointer;white-space:nowrap;">🚪 Salir</button>
       </div>
     </div>
     <div class="desk-scroll sb">
@@ -433,7 +449,7 @@ body.sup-mode .phone-frame{width:100%;min-height:100vh;border-radius:0;box-shado
     <div class="desk-foot"><button onclick="doLogout()">🚪 CERRAR SESIÓN</button></div>
   </div>
   <div class="desk-main">
-    <div class="desk-topbar"><div class="desk-pagetitle">Registro de Usuario</div><div class="desk-clock" id="desk-clock2">--:--</div></div>
+    <div class="desk-topbar"><div class="desk-pagetitle">Usuarios</div><div style="display:flex;align-items:center;gap:10px;"><div class="desk-clock" id="desk-clock2">--:--</div><button onclick="doLogout()" style="padding:6px 13px;background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.3);border-radius:8px;color:var(--red);font-size:11px;font-weight:700;cursor:pointer;">🚪 Salir</button></div></div>
     <div class="desk-scroll sb">
       <div class="desk-2col">
         <div class="desk-card">
@@ -496,7 +512,7 @@ body.sup-mode .phone-frame{width:100%;min-height:100vh;border-radius:0;box-shado
     <div class="desk-foot"><button onclick="doLogout()">🚪 CERRAR SESIÓN</button></div>
   </div>
   <div class="desk-main">
-    <div class="desk-topbar"><div class="desk-pagetitle">Registro de Cliente</div></div>
+    <div class="desk-topbar"><div class="desk-pagetitle">Clientes</div><button onclick="doLogout()" style="padding:6px 13px;background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.3);border-radius:8px;color:var(--red);font-size:11px;font-weight:700;cursor:pointer;">🚪 Salir</button></div>
     <div class="desk-scroll sb">
       <div class="desk-2col">
         <div class="desk-card">
@@ -560,7 +576,7 @@ body.sup-mode .phone-frame{width:100%;min-height:100vh;border-radius:0;box-shado
     <div class="desk-foot"><button onclick="doLogout()">🚪 CERRAR SESIÓN</button></div>
   </div>
   <div class="desk-main">
-    <div class="desk-topbar"><div class="desk-pagetitle">Programar Rutas</div></div>
+    <div class="desk-topbar"><div class="desk-pagetitle">Rutas</div><button onclick="doLogout()" style="padding:6px 13px;background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.3);border-radius:8px;color:var(--red);font-size:11px;font-weight:700;cursor:pointer;">🚪 Salir</button></div>
     <div class="desk-scroll sb">
       <div class="desk-2col">
         <div class="desk-card">
@@ -660,44 +676,32 @@ body.sup-mode .phone-frame{width:100%;min-height:100vh;border-radius:0;box-shado
     <div class="desk-foot"><button onclick="doLogout()">🚪 CERRAR SESIÓN</button></div>
   </div>
   <div class="desk-main">
-    <div class="desk-topbar"><div class="desk-pagetitle">Ajustes</div></div>
-    <div class="desk-scroll sb">
+    <div class="desk-topbar">
+      <div class="desk-pagetitle">Ajustes</div>
+      <button onclick="doLogout()" style="padding:7px 14px;background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.3);border-radius:8px;color:var(--red);font-size:12px;font-weight:700;cursor:pointer;letter-spacing:.5px;">🚪 Salir</button>
+    </div>
+    <div class="desk-scroll sb" style="overflow-y:auto;-webkit-overflow-scrolling:touch;">
       <div class="desk-2col">
         <div class="desk-card">
-          <div class="desk-card-title">Asignación</div>
-          <div class="fc" style="gap:14px;">
-            <div class="fg"><div class="flbl">USUARIO</div><select class="fsel" id="aj-usr"></select></div>
-            <div class="fg"><div class="flbl">CLIENTES</div><select class="fsel" id="aj-cli"></select></div>
-            <div class="fg"><div class="flbl">RUTA</div><select class="fsel" id="aj-ruta"></select></div>
-            <div class="fg"><div class="flbl">ROL</div>
-              <select class="fsel" id="aj-rol"><option value="">Seleccionar...</option>
-                <option>Supervisor</option><option>Promotor</option><option>Mercaderista</option><option>Vendedor</option>
-              </select>
-            </div>
+          <div class="desk-card-title">Resultados de Visita</div>
+          <div class="rpli" id="aj-res">
+            <div class="ritem"><span class="riname">Visita exitosa</span><button class="trsh" onclick="this.parentElement.remove();syncAj()">🗑️</button></div>
+            <div class="ritem"><span class="riname">Producto exhibido OK</span><button class="trsh" onclick="this.parentElement.remove();syncAj()">🗑️</button></div>
+          </div>
+          <div style="display:flex;gap:8px;margin-top:10px;">
+            <input class="finput" id="aj-nres" placeholder="Nuevo resultado..." style="flex:1;font-size:12px;padding:8px 10px;">
+            <button onclick="addAjItem('aj-res','aj-nres')" style="padding:8px 14px;background:var(--blue-btn);border:none;border-radius:6px;color:#fff;font-size:12px;font-weight:700;cursor:pointer;">+ Agregar</button>
           </div>
         </div>
-        <div>
-          <div class="desk-card" style="margin-bottom:16px;">
-            <div class="desk-card-title">Resultados de Visita</div>
-            <div class="rpli" id="aj-res">
-              <div class="ritem"><span class="riname">Visita exitosa</span><button class="trsh" onclick="this.parentElement.remove();syncAj()">🗑️</button></div>
-              <div class="ritem"><span class="riname">Producto exhibido OK</span><button class="trsh" onclick="this.parentElement.remove();syncAj()">🗑️</button></div>
-            </div>
-            <div style="display:flex;gap:8px;margin-top:10px;">
-              <input class="finput" id="aj-nres" placeholder="Nuevo resultado..." style="flex:1;font-size:12px;padding:8px 10px;">
-              <button onclick="addAjItem('aj-res','aj-nres')" style="padding:8px 14px;background:var(--blue-btn);border:none;border-radius:6px;color:#fff;font-size:12px;font-weight:700;cursor:pointer;">+ Agregar</button>
-            </div>
+        <div class="desk-card">
+          <div class="desk-card-title">Tipos de Actividad</div>
+          <div class="rpli" id="aj-act">
+            <div class="ritem"><span class="riname">Surtir exhibicion</span><button class="trsh" onclick="this.parentElement.remove();syncAj()">🗑️</button></div>
+            <div class="ritem"><span class="riname">Limpieza</span><button class="trsh" onclick="this.parentElement.remove();syncAj()">🗑️</button></div>
           </div>
-          <div class="desk-card">
-            <div class="desk-card-title">Tipos de Actividad</div>
-            <div class="rpli" id="aj-act">
-              <div class="ritem"><span class="riname">Surtir exhibicion</span><button class="trsh" onclick="this.parentElement.remove();syncAj()">🗑️</button></div>
-              <div class="ritem"><span class="riname">Limpieza</span><button class="trsh" onclick="this.parentElement.remove();syncAj()">🗑️</button></div>
-            </div>
-            <div style="display:flex;gap:8px;margin-top:10px;">
-              <input class="finput" id="aj-nact" placeholder="Nueva actividad..." style="flex:1;font-size:12px;padding:8px 10px;">
-              <button onclick="addAjItem('aj-act','aj-nact')" style="padding:8px 14px;background:var(--blue-btn);border:none;border-radius:6px;color:#fff;font-size:12px;font-weight:700;cursor:pointer;">+ Agregar</button>
-            </div>
+          <div style="display:flex;gap:8px;margin-top:10px;">
+            <input class="finput" id="aj-nact" placeholder="Nueva actividad..." style="flex:1;font-size:12px;padding:8px 10px;">
+            <button onclick="addAjItem('aj-act','aj-nact')" style="padding:8px 14px;background:var(--blue-btn);border:none;border-radius:6px;color:#fff;font-size:12px;font-weight:700;cursor:pointer;">+ Agregar</button>
           </div>
         </div>
       </div>
@@ -706,10 +710,6 @@ body.sup-mode .phone-frame{width:100%;min-height:100vh;border-radius:0;box-shado
       <button class="desk-savebtn secondary" onclick="nav('s-dash')">Cancelar</button>
       <button class="desk-savebtn primary" onclick="doSaveAj()">💾 Guardar Ajustes</button>
     </div>
-  </div>
-  <div class="sf two">
-    <div class="scol"><div class="slbl">GUARDAR</div><div class="sico" onclick="doSaveAj()">💾</div></div>
-    <div class="scol"><div class="slbl">MODIFICAR</div><div class="sico" onclick="showToast('Modo modificación activado')">⚙️</div></div>
   </div>
 </div>
 
@@ -1447,15 +1447,8 @@ function renderRep(){
 
 // ── AJUSTES ──
 function initAjSelects(){
-  const su=document.getElementById('aj-usr');
-  su.innerHTML='<option value="">Seleccionar...</option>'+S.users.map(u=>`<option value="${u.id}">${u.nom}</option>`).join('');
-  const sc=document.getElementById('aj-cli');
-  sc.innerHTML='<option value="">Seleccionar...</option>'+S.clients.map(c=>`<option value="${c.id}">${c.alm}</option>`).join('');
-  const sr=document.getElementById('aj-ruta');
-  sr.innerHTML='<option value="">Seleccionar...</option>'+S.routes.map(r=>{
-    const u=S.users.find(x=>x.id===r.uid);
-    return `<option value="${r.id}">Ruta ${r.id} – ${u?u.nom.split(' ')[0]:'?'} (${r.zona})</option>`;
-  }).join('');
+  // Sección de asignación removida — solo sincronizamos listas de resultados/actividades
+  syncAj();
 }
 function addAjItem(lid,iid){
   const inp=document.getElementById(iid), val=inp.value.trim();
