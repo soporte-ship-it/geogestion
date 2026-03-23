@@ -1,0 +1,1273 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>GEOGESTION - Latin Products</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Barlow:wght@400;600;700;800&family=Barlow+Condensed:wght@600;700;800&display=swap');
+:root {
+  --navy:#0a0f6b; --navy-dark:#070c55; --navy-mid:#0d1580;
+  --blue-btn:#4a9fd4; --blue-btn-light:#7ec8e3;
+  --cyan:#00d4e8; --cyan-light:#b8eef5; --cyan-bg:#d0eff7;
+  --card-bg:#0e1a8a; --green:#22c55e; --orange:#f59e0b; --red:#ef4444;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Barlow',sans-serif;background:linear-gradient(135deg,#0d0d2b,#1a1a3e);display:flex;justify-content:center;align-items:flex-start;min-height:100vh;padding:20px;}
+.phone-frame{width:390px;min-height:844px;background:var(--navy);border-radius:40px;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,.7),inset 0 1px 0 rgba(255,255,255,.1);}
+.screen{display:none;flex-direction:column;min-height:844px;animation:fadeIn .3s ease;}
+.screen.active{display:flex;}
+@keyframes fadeIn{from{opacity:0;transform:translateX(8px)}to{opacity:1;transform:none}}
+
+/* ══ DESKTOP LAYOUT (1200px+) ══ */
+@media(min-width:1200px){
+  body{padding:0;align-items:stretch;background:#0b0e2e;}
+  .phone-frame{display:contents;}
+  #s-dash,#s-regusr,#s-regcli,#s-ruta,#s-rep,#s-ajustes,#s-super{
+    position:fixed;inset:0;display:none;flex-direction:row;min-height:100vh;border-radius:0;
+    background:#0b0e2e;animation:none;
+  }
+  #s-dash.active,#s-regusr.active,#s-regcli.active,#s-ruta.active,
+  #s-rep.active,#s-ajustes.active,#s-super.active{display:flex;}
+  #s-login,#s-user,#s-fin{
+    min-height:844px;border-radius:40px;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);
+    width:390px;box-shadow:0 30px 80px rgba(0,0,0,.7);z-index:10;
+  }
+  .desk-side{width:240px;flex-shrink:0;background:var(--navy-dark);display:flex;flex-direction:column;border-right:1px solid rgba(74,159,212,.15);}
+  .desk-logo{padding:22px 20px 18px;border-bottom:1px solid rgba(74,159,212,.15);}
+  .desk-logo .logo-box{margin-bottom:8px;display:inline-flex;}
+  .desk-app{font-family:'Barlow Condensed',sans-serif;font-size:19px;font-weight:800;color:#fff;letter-spacing:2px;margin-top:5px;}
+  .desk-user-lbl{font-size:11px;color:var(--cyan-light);margin-top:2px;}
+  .desk-nav{flex:1;padding:12px 0;overflow-y:auto;}
+  .dnav-item{display:flex;align-items:center;gap:11px;padding:12px 20px;cursor:pointer;color:rgba(255,255,255,.55);font-size:13px;font-weight:700;letter-spacing:.4px;transition:all .2s;border-left:3px solid transparent;}
+  .dnav-item:hover{background:rgba(74,159,212,.1);color:#fff;}
+  .dnav-item.act{background:rgba(74,159,212,.18);color:var(--cyan);border-left-color:var(--cyan);}
+  .dnav-item .dnico{font-size:18px;width:22px;text-align:center;flex-shrink:0;}
+  .desk-foot{padding:14px 20px;border-top:1px solid rgba(74,159,212,.15);}
+  .desk-foot button{width:100%;padding:9px;background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.3);border-radius:8px;color:var(--red);font-size:12px;font-weight:700;cursor:pointer;letter-spacing:.5px;}
+  .desk-main{flex:1;display:flex;flex-direction:column;overflow:hidden;}
+  .desk-topbar{background:var(--navy-dark);padding:0 28px;height:58px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(74,159,212,.15);flex-shrink:0;}
+  .desk-pagetitle{font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:800;color:#fff;letter-spacing:2px;text-transform:uppercase;}
+  .desk-clock{font-size:14px;font-weight:700;color:var(--cyan);font-family:monospace;}
+  .desk-scroll{flex:1;overflow-y:auto;padding:28px 32px;}
+  .desk-scroll::-webkit-scrollbar{width:4px;}
+  .desk-scroll::-webkit-scrollbar-thumb{background:rgba(74,159,212,.3);border-radius:4px;}
+  .desk-4col{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-bottom:24px;}
+  .desk-2col{display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:start;}
+  .desk-3col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px;align-items:start;}
+  .desk-card{background:var(--card-bg);border-radius:12px;border:1px solid rgba(74,159,212,.2);padding:20px;}
+  .desk-card-title{font-size:11px;font-weight:800;color:var(--cyan);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid rgba(74,159,212,.15);}
+  .desk-stat{background:var(--card-bg);border-radius:12px;border:1px solid rgba(74,159,212,.2);padding:22px 24px;}
+  .desk-stat-num{font-size:40px;font-weight:900;color:#fff;line-height:1;}
+  .desk-stat-lbl{font-size:10px;font-weight:800;color:var(--cyan-light);letter-spacing:1px;margin-top:6px;text-transform:uppercase;}
+  .desk-savebar{background:var(--navy-dark);padding:14px 32px;display:flex;justify-content:flex-end;gap:12px;border-top:1px solid rgba(74,159,212,.15);flex-shrink:0;}
+  .desk-savebtn{padding:10px 30px;border:none;border-radius:8px;font-size:13px;font-weight:800;cursor:pointer;letter-spacing:1px;}
+  .desk-savebtn.primary{background:linear-gradient(135deg,var(--blue-btn),var(--blue-btn-light));color:#fff;}
+  .desk-savebtn.secondary{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.2);color:#fff;}
+  .desk-list-item{background:rgba(255,255,255,.05);border:1px solid rgba(74,159,212,.15);border-radius:9px;padding:12px 14px;display:flex;align-items:center;gap:10px;}
+  .desk-list-item:hover{background:rgba(74,159,212,.08);}
+  #s-dash .hdr,#s-regusr .hdr,#s-regcli .hdr,#s-ruta .hdr,#s-rep .hdr,#s-ajustes .hdr,
+  #s-dash .sub,#s-regusr .sub,#s-regcli .sub,#s-ruta .sub,#s-rep .sub,#s-ajustes .sub,
+  #s-regusr .sf,#s-regcli .sf,#s-ruta .sf,#s-rep .sf,#s-ajustes .sf{display:none!important;}
+  #s-regusr .sb,#s-regcli .sb,#s-ruta .sb,#s-rep .sb,#s-ajustes .sb{overflow:visible;flex:none;}
+  #s-dash .sb{overflow:visible;flex:none;}
+  #super-overlay,#super-drawer{display:none!important;}
+  .desk-scroll .fc{padding:0;}
+  .desk-scroll .finput,.desk-scroll .fsel,.desk-scroll .fta{font-size:13px;}
+}
+/* HEADER */
+.hdr{display:flex;align-items:center;justify-content:space-between;padding:13px 17px;background:var(--navy-dark);flex-shrink:0;}
+.hdr.cyan{background:var(--cyan-light);}
+.logo-box{background:#fff;border-radius:6px;padding:4px 8px;display:flex;flex-direction:column;align-items:center;line-height:1.1;}
+.ll{font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:900;color:var(--navy-dark);}
+.lp{font-size:7px;font-weight:700;color:var(--navy-dark);letter-spacing:1px;}
+.lg{font-size:6px;color:#666;letter-spacing:1px;font-weight:600;}
+.htitle{font-family:'Barlow Condensed',sans-serif;font-size:21px;font-weight:800;color:#fff;text-align:center;letter-spacing:1px;line-height:1.1;text-transform:uppercase;}
+.htitle.dark{color:var(--navy-dark);}
+.hright{font-size:10px;font-weight:700;color:#fff;text-align:right;}
+.hright.dark{color:var(--navy-dark);}
+.hbur{display:flex;flex-direction:column;gap:5px;cursor:pointer;padding:4px;}
+.hbur span{width:24px;height:2px;background:#fff;border-radius:2px;}
+/* SUBHEADER */
+.sub{background:#1a2290;padding:9px 20px;text-align:center;font-size:12px;font-weight:800;color:#fff;letter-spacing:2px;text-transform:uppercase;flex-shrink:0;}
+/* SCROLL */
+.sb{flex:1;overflow-y:auto;}
+.sb::-webkit-scrollbar{width:3px;}
+.sb::-webkit-scrollbar-thumb{background:rgba(74,159,212,.4);border-radius:4px;}
+/* BUTTONS */
+.content{padding:26px 18px;display:flex;flex-direction:column;gap:16px;}
+.mbtn{display:block;width:100%;padding:17px 20px;border:none;border-radius:30px;background:linear-gradient(135deg,var(--blue-btn),var(--blue-btn-light));color:#fff;font-family:'Barlow',sans-serif;font-size:14px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;text-align:center;box-shadow:0 4px 15px rgba(74,159,212,.3),inset 0 1px 0 rgba(255,255,255,.2);transition:all .2s;position:relative;overflow:hidden;}
+.mbtn::before{content:'';position:absolute;top:0;left:0;right:0;height:50%;background:rgba(255,255,255,.12);border-radius:30px 30px 0 0;}
+.mbtn:hover{transform:translateY(-1px);}
+/* LOGIN */
+.llogo{display:flex;flex-direction:column;align-items:center;padding:55px 20px 30px;gap:10px;}
+.lbox{background:#fff;border-radius:12px;padding:18px 36px;text-align:center;}
+.bl{font-family:'Barlow Condensed',sans-serif;font-size:50px;font-weight:900;color:var(--navy-dark);letter-spacing:-2px;line-height:1;}
+.bp{font-size:13px;font-weight:700;color:var(--navy-dark);letter-spacing:4px;}
+.ltitle{font-family:'Barlow Condensed',sans-serif;font-size:34px;font-weight:800;color:#fff;letter-spacing:3px;}
+.lfields{padding:28px 34px;display:flex;flex-direction:column;gap:24px;}
+.lfrow{display:flex;align-items:center;gap:14px;}
+.lico{font-size:42px;}
+.lfwrap{flex:1;display:flex;flex-direction:column;gap:5px;}
+.llabel{color:#fff;font-size:14px;font-weight:600;}
+.linput{width:100%;padding:11px 13px;background:#fff;border:none;border-radius:6px;font-size:14px;outline:none;}
+.lbwrap{padding:0 34px 26px;}
+.lbtn{width:100%;padding:14px;background:linear-gradient(135deg,var(--blue-btn),var(--blue-btn-light));border:none;border-radius:30px;color:#fff;font-size:15px;font-weight:800;letter-spacing:2px;cursor:pointer;box-shadow:0 4px 15px rgba(74,159,212,.4);transition:all .2s;}
+.lerr{color:#ff8080;font-size:11px;text-align:center;padding:0 34px;display:none;font-weight:600;}
+/* USER PANEL */
+.upbar{background:var(--navy-dark);padding:13px 17px;display:flex;align-items:center;gap:11px;flex-shrink:0;}
+.uav{width:50px;height:50px;border-radius:50%;border:3px solid var(--cyan);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:800;color:#fff;flex-shrink:0;background:var(--navy-mid);}
+.uinfo{flex:1;}
+.uname{font-size:16px;font-weight:700;color:#fff;}
+.uroute{font-size:11px;color:var(--cyan-light);}
+.lout{padding:6px 13px;background:transparent;border:2px solid #fff;border-radius:20px;color:#fff;font-size:12px;font-weight:700;cursor:pointer;}
+.sbar{display:grid;grid-template-columns:repeat(4,1fr);background:var(--navy-mid);flex-shrink:0;}
+.si{padding:10px 5px;text-align:center;border-right:1px solid rgba(255,255,255,.1);}
+.si:last-child{border-right:none;}
+.snum{font-size:19px;font-weight:800;color:#fff;}
+.slbl{font-size:7px;font-weight:700;color:var(--cyan-light);letter-spacing:.3px;margin-top:1px;}
+/* VISIT CARD */
+.vc{background:var(--card-bg);border-radius:12px;border:1px solid rgba(74,159,212,.3);overflow:hidden;margin-bottom:12px;}
+.vch{padding:12px 14px;display:flex;align-items:flex-start;gap:10px;border-bottom:1px solid rgba(255,255,255,.1);}
+.mico{font-size:28px;}
+.vci{flex:1;}
+.vcn{font-size:14px;font-weight:800;color:#fff;}
+.vca{font-size:10px;color:var(--cyan-light);margin-top:2px;}
+.vrole{display:inline-block;background:var(--blue-btn);color:#fff;font-size:9px;font-weight:700;padding:3px 10px;border-radius:12px;margin-top:4px;letter-spacing:1px;}
+.vta{padding:11px 14px;border-bottom:1px solid rgba(255,255,255,.1);}
+.vtlbl{font-size:11px;color:var(--cyan);font-weight:600;}
+.vtd{font-size:32px;font-weight:800;color:var(--cyan);font-family:monospace;}
+.fbtn{display:block;width:calc(100% - 28px);margin:11px 14px;padding:12px;background:linear-gradient(135deg,var(--blue-btn),var(--cyan));border:none;border-radius:30px;color:#fff;font-size:14px;font-weight:800;cursor:pointer;}
+.novmsg{text-align:center;color:var(--cyan-light);font-size:12px;padding:28px 18px;}
+/* FORMS */
+.fc{padding:18px 17px;display:flex;flex-direction:column;gap:17px;}
+.fg{display:flex;flex-direction:column;gap:6px;}
+.flbl{font-size:11px;font-weight:800;color:#fff;letter-spacing:1px;text-transform:uppercase;}
+.finput{width:100%;padding:11px 13px;background:#fff;border:none;border-radius:6px;font-size:13px;font-family:'Barlow',sans-serif;outline:none;color:#222;}
+.fsel{width:100%;padding:11px 13px;background:#fff;border:none;border-radius:6px;font-size:13px;font-family:'Barlow',sans-serif;outline:none;color:#222;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M0 0l6 8 6-8z' fill='%23333'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;cursor:pointer;}
+.fta{width:100%;padding:11px 13px;background:#fff;border:none;border-radius:6px;font-size:13px;font-family:'Barlow',sans-serif;outline:none;color:#222;min-height:85px;resize:vertical;}
+.sdays{display:flex;gap:9px;flex-wrap:wrap;}
+.dc{display:flex;flex-direction:column;align-items:center;gap:3px;}
+.dlbl{font-size:10px;color:#fff;font-weight:700;}
+.dchk{width:20px;height:20px;accent-color:var(--cyan);cursor:pointer;}
+.trow{display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
+.tlbl{font-size:10px;color:#fff;font-weight:800;letter-spacing:.2px;flex:0 0 auto;}
+.tinput{width:44px;padding:7px;background:#fff;border:none;border-radius:4px;text-align:center;font-size:12px;font-weight:700;color:#222;outline:none;}
+.tcol{color:#fff;font-weight:800;font-size:14px;}
+.tampm{font-size:10px;color:#fff;font-weight:700;}
+.tsub{font-size:8px;color:var(--cyan-light);text-align:center;margin-top:1px;}
+/* ROUTE PANEL */
+.rp{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.15);border-radius:8px;padding:10px;}
+.rptitle{font-size:10px;font-weight:800;color:var(--cyan-light);letter-spacing:1px;text-align:center;margin-bottom:8px;}
+.rpls{margin-bottom:8px;}
+.rplh{font-size:11px;font-weight:800;color:#fff;background:rgba(255,255,255,.1);padding:5px 8px;border-radius:4px;margin-bottom:5px;}
+.rpli{display:flex;flex-direction:column;gap:4px;}
+.ritem{display:flex;align-items:center;gap:5px;justify-content:space-between;}
+.riname{background:#fff;color:#222;font-size:11px;padding:5px 9px;border-radius:4px;flex:1;}
+.riadd{color:var(--cyan);font-size:11px;font-weight:700;cursor:pointer;white-space:nowrap;}
+.trsh{background:none;border:none;font-size:13px;cursor:pointer;padding:2px;}
+/* SAVE FOOTER */
+.sf{padding:13px 20px;display:flex;flex-direction:column;align-items:center;gap:4px;border-top:1px solid rgba(255,255,255,.1);flex-shrink:0;}
+.sf.two{flex-direction:row;justify-content:center;gap:36px;}
+.slbl{font-size:11px;font-weight:700;color:#fff;letter-spacing:1px;text-align:center;}
+.sico{font-size:26px;cursor:pointer;}
+.scol{display:flex;flex-direction:column;align-items:center;gap:3px;}
+/* DASHBOARD */
+.dss{font-size:10px;font-weight:800;color:var(--cyan);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:7px;}
+.drow{display:grid;grid-template-columns:repeat(2,1fr);gap:9px;margin-bottom:12px;}
+.dcard{background:var(--card-bg);border-radius:10px;padding:13px;border:1px solid rgba(74,159,212,.2);}
+.dnum{font-size:26px;font-weight:900;color:#fff;}
+.dnum.g{color:var(--green);}
+.dnum.o{color:var(--orange);}
+.dnum.c{color:var(--cyan);}
+.dlbl2{font-size:9px;font-weight:700;color:var(--cyan-light);letter-spacing:.4px;margin-top:2px;}
+.ouc{background:var(--card-bg);border-radius:10px;border:1px solid rgba(74,159,212,.25);padding:10px 12px;margin-bottom:7px;display:flex;align-items:center;gap:10px;}
+.odot{width:9px;height:9px;border-radius:50%;background:var(--green);flex-shrink:0;box-shadow:0 0 6px var(--green);}
+.odot.busy{background:var(--orange);box-shadow:0 0 6px var(--orange);}
+.ouav{width:34px;height:34px;border-radius:50%;background:var(--navy-mid);border:2px solid var(--cyan);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#fff;flex-shrink:0;}
+.ouinfo{flex:1;min-width:0;}
+.ouname{font-size:12px;font-weight:700;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.oustore{font-size:10px;color:var(--cyan-light);margin-top:1px;}
+.outime{font-size:10px;font-weight:700;color:var(--cyan);font-family:monospace;}
+.oustatus{font-size:9px;font-weight:800;padding:3px 7px;border-radius:10px;letter-spacing:.4px;flex-shrink:0;}
+.stactive{background:rgba(34,197,94,.2);color:var(--green);}
+.stvisit{background:rgba(245,158,11,.2);color:var(--orange);}
+.nodata{text-align:center;color:rgba(255,255,255,.25);font-size:12px;padding:18px;}
+.vrecent{background:rgba(255,255,255,.05);border-radius:8px;padding:9px 12px;margin-bottom:6px;border-left:3px solid var(--green);}
+.vrecent.pend{border-left-color:var(--orange);}
+.vrc{font-size:12px;font-weight:700;color:#fff;}
+.vrm{font-size:10px;color:var(--cyan-light);margin-top:2px;}
+.vrr{font-size:10px;font-weight:700;color:var(--green);margin-top:3px;}
+.vrr.pend{color:var(--orange);}
+/* REPORT TABLE */
+.rtbl{width:100%;border-collapse:collapse;}
+.rtbl th{background:rgba(255,255,255,.1);color:var(--cyan-light);font-size:9px;font-weight:800;letter-spacing:.4px;padding:7px 7px;text-align:left;text-transform:uppercase;}
+.rtbl td{color:#fff;font-size:11px;padding:7px 7px;border-bottom:1px solid rgba(255,255,255,.06);}
+.bdg{display:inline-block;padding:2px 7px;border-radius:8px;font-size:9px;font-weight:800;}
+.bdg.g{background:rgba(34,197,94,.2);color:var(--green);}
+.bdg.o{background:rgba(245,158,11,.2);color:var(--orange);}
+/* TOAST */
+.toast{position:fixed;top:22px;left:50%;transform:translateX(-50%) translateY(-80px);background:var(--green);color:#fff;padding:10px 20px;border-radius:20px;font-size:13px;font-weight:700;z-index:999;transition:transform .3s ease;box-shadow:0 6px 20px rgba(0,0,0,.4);white-space:nowrap;}
+.toast.err{background:var(--red);}
+.toast.show{transform:translateX(-50%) translateY(0);}
+/* NAV */
+.dnav{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);display:flex;gap:5px;background:rgba(5,8,50,.93);padding:9px 13px;border-radius:30px;backdrop-filter:blur(12px);z-index:100;flex-wrap:wrap;justify-content:center;max-width:520px;border:1px solid rgba(74,159,212,.2);}
+.dbtn{padding:5px 10px;background:rgba(74,159,212,.12);border:1px solid rgba(74,159,212,.25);border-radius:14px;color:rgba(255,255,255,.65);font-size:10px;font-weight:700;cursor:pointer;transition:all .2s;white-space:nowrap;}
+.dbtn:hover{background:rgba(74,159,212,.3);color:#fff;}
+.dbtn.active{background:var(--blue-btn);color:#fff;border-color:var(--blue-btn);}
+/* list items */
+.uitem{background:rgba(255,255,255,.06);border-radius:7px;padding:9px 11px;display:flex;align-items:center;gap:9px;}
+.uiav{width:30px;height:30px;border-radius:50%;background:var(--navy-mid);border:2px solid var(--cyan);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:#fff;flex-shrink:0;}
+.uii{flex:1;min-width:0;}
+.uin{font-size:12px;font-weight:700;color:#fff;}
+.uim{font-size:10px;color:var(--cyan-light);}
+.uidot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+</style>
+</head>
+<body>
+<div class="toast" id="toast"></div>
+<div class="phone-frame">
+
+<!-- ══ LOGIN ══ -->
+<div class="screen active" id="s-login" style="background:var(--navy);">
+  <div class="llogo">
+    <div class="lbox"><div class="bl">LATIN</div><div class="bp">PRODUCTS</div></div>
+    <div class="ltitle">GEOGESTION</div>
+  </div>
+  <div class="lfields">
+    <div class="lfrow"><div class="lico">👥</div>
+      <div class="lfwrap"><div class="llabel">Usuario:</div><input class="linput" id="li-u" type="text" placeholder="usuario"></div>
+    </div>
+    <div class="lfrow"><div class="lico">🔐</div>
+      <div class="lfwrap"><div class="llabel">Contraseña:</div><input class="linput" id="li-p" type="password" placeholder="••••••"></div>
+    </div>
+  </div>
+  <div id="lerr" class="lerr">Usuario o contraseña incorrectos</div>
+  <div class="lbwrap" style="margin-top:8px;"><button class="lbtn" onclick="doLogin()">INGRESAR</button></div>
+
+</div>
+
+<!-- ══ SUPERVISOR CONFIG ══ -->
+<div class="screen" id="s-super">
+  <div class="hdr">
+    <div class="logo-box"><span class="ll">LATIN</span><span class="lp">PRODUCTS</span></div>
+    <div class="htitle">PANEL<br>SUPERVISOR</div>
+    <div class="hbur" onclick="nav('s-super')"><span></span><span></span><span></span></div>
+  </div>
+  <div class="sub">CONFIGURACION</div>
+  <div class="sb"><div class="content" style="gap:16px;padding-top:32px;">
+    <button class="mbtn" onclick="nav('s-regusr')">REGISTRO DE USUARIO</button>
+    <button class="mbtn" onclick="nav('s-regcli')">REGISTRO DE CLIENTE</button>
+    <button class="mbtn" onclick="nav('s-ruta')">PROGRAMAR RUTAS</button>
+    <button class="mbtn" onclick="nav('s-rep')">REPORTES</button>
+    <button class="mbtn" onclick="nav('s-ajustes')">AJUSTES</button>
+    <button class="mbtn" onclick="nav('s-dash')" style="background:linear-gradient(135deg,#1a6a9a,#2a9fd4);">📊 VER DASHBOARD</button>
+  </div></div>
+</div>
+
+<!-- ══ DASHBOARD ══ -->
+<div class="screen" id="s-dash">
+  <!-- MOBILE header (hidden on desktop) -->
+  <div class="hdr">
+    <div class="logo-box"><span class="ll">LATIN</span><span class="lp">PRODUCTS</span></div>
+    <div class="htitle">DASHBOARD</div>
+    <div class="hbur" onclick="openSuperMenu()"><span></span><span></span><span></span></div>
+  </div>
+  <div class="sub" style="display:flex;align-items:center;justify-content:space-between;padding:9px 16px;">
+    <span id="dash-user-info" style="font-size:11px;color:var(--cyan-light);font-weight:700;">—</span>
+    <span style="letter-spacing:2px;">DASHBOARD</span>
+    <button class="lout" style="font-size:10px;padding:4px 10px;" onclick="doLogout()">Salir</button>
+  </div>
+  <!-- DESKTOP sidebar -->
+  <div class="desk-side">
+    <div class="desk-logo">
+      <div class="logo-box"><span class="ll">LATIN</span><span class="lp">PRODUCTS</span></div>
+      <div class="desk-app">GEOGESTION</div>
+      <div class="desk-user-lbl" id="desk-uname">Supervisor</div>
+    </div>
+    <nav class="desk-nav">
+      <div class="dnav-item act" id="dn-dash" onclick="nav('s-dash')"><span class="dnico">📊</span>Dashboard</div>
+      <div class="dnav-item" id="dn-usr" onclick="nav('s-regusr')"><span class="dnico">👤</span>Usuarios</div>
+      <div class="dnav-item" id="dn-cli" onclick="nav('s-regcli')"><span class="dnico">🏪</span>Clientes</div>
+      <div class="dnav-item" id="dn-ruta" onclick="nav('s-ruta')"><span class="dnico">🗺️</span>Rutas</div>
+      <div class="dnav-item" id="dn-rep" onclick="nav('s-rep')"><span class="dnico">📈</span>Reportes</div>
+      <div class="dnav-item" id="dn-aj" onclick="nav('s-ajustes')"><span class="dnico">⚙️</span>Ajustes</div>
+    </nav>
+    <div class="desk-foot"><button onclick="doLogout()">🚪 CERRAR SESIÓN</button></div>
+  </div>
+  <!-- DESKTOP main -->
+  <div class="desk-main">
+    <div class="desk-topbar">
+      <div class="desk-pagetitle">Dashboard</div>
+      <div class="desk-clock" id="desk-clock">--:--</div>
+    </div>
+    <div class="desk-scroll sb">
+      <div class="desk-4col">
+        <div class="desk-stat"><div class="desk-stat-num c" id="d-online">0</div><div class="desk-stat-lbl">Usuarios en Línea</div></div>
+        <div class="desk-stat"><div class="desk-stat-num" id="d-total">0</div><div class="desk-stat-lbl">Visitas Hoy</div></div>
+        <div class="desk-stat"><div class="desk-stat-num g" id="d-comp">0</div><div class="desk-stat-lbl">Completadas</div></div>
+        <div class="desk-stat"><div class="desk-stat-num o" id="d-pend">0</div><div class="desk-stat-lbl">Pendientes</div></div>
+      </div>
+      <div class="desk-2col" style="align-items:start;">
+        <div class="desk-card">
+          <div class="desk-card-title">🟢 Usuarios en Línea — Por Almacén</div>
+          <div id="d-online-list"><div class="nodata">No hay usuarios en línea</div></div>
+        </div>
+        <div class="desk-card">
+          <div class="desk-card-title">✅ Visitas Recientes</div>
+          <div id="d-recent"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ PANEL USUARIO ══ -->
+<div class="screen" id="s-user" style="background:var(--cyan-bg);">
+  <div class="hdr cyan">
+    <div class="logo-box"><span class="ll">LATIN</span><span class="lp">PRODUCTS</span><span class="lg">GEOGESTION</span></div>
+    <div class="htitle dark">PANEL<br>USUARIO</div>
+    <div class="hright dark" id="uclock">--:--</div>
+  </div>
+  <div class="upbar">
+    <div class="uav" id="u-av">NU</div>
+    <div class="uinfo">
+      <div class="uname" id="u-name">Nombre de Usuario</div>
+      <div class="uroute" id="u-route">Ciudad - Ruta</div>
+    </div>
+    <button class="lout" onclick="doLogout()">Salir</button>
+  </div>
+  <div class="sbar">
+    <div class="si"><div class="snum" id="u-asig">0</div><div class="slbl">ASIGNADAS</div></div>
+    <div class="si"><div class="snum" id="u-comp">0</div><div class="slbl">COMPLETADAS</div></div>
+    <div class="si"><div class="snum" id="u-pend">0</div><div class="slbl">PENDIENTES</div></div>
+    <div class="si"><div class="snum" id="u-time">0h</div><div class="slbl">TIEMPO</div></div>
+  </div>
+  <div class="sb" style="background:var(--cyan-bg);">
+    <div style="padding:13px;" id="u-visits"><div class="novmsg">Sin visitas asignadas</div></div>
+  </div>
+</div>
+
+<!-- ══ FINALIZAR VISITA ══ -->
+<div class="screen" id="s-fin">
+  <div class="hdr">
+    <div class="logo-box"><span class="ll">LATIN</span><span class="lp">PRODUCTS</span></div>
+    <div class="htitle">PANEL<br>USUARIO</div>
+    <div class="hright" id="fclock">--:--</div>
+  </div>
+  <div class="sub">FINALIZAR VISITA</div>
+  <div class="sb"><div class="fc">
+    <div style="background:var(--card-bg);border-radius:10px;padding:12px;border:1px solid rgba(74,159,212,.3);">
+      <div style="font-size:13px;font-weight:800;color:#fff;" id="fin-cn">-</div>
+      <div style="font-size:11px;color:var(--cyan-light);margin-top:3px;" id="fin-ca">-</div>
+    </div>
+    <div class="fg"><div class="flbl">RESULTADO DE LA VISITA</div><select class="fsel" id="fin-res"><option value="">Seleccionar...</option></select></div>
+    <div class="fg"><div class="flbl">TIPO DE ACTIVIDAD</div><select class="fsel" id="fin-act"><option value="">Seleccionar...</option></select></div>
+    <div class="fg"><div class="flbl">OBSERVACIONES</div><textarea class="fta" id="fin-obs" rows="4" placeholder="Escribe observaciones..."></textarea></div>
+  </div></div>
+  <div class="sf"><div class="slbl">FINALIZAR Y GUARDAR</div><div class="sico" onclick="doFinalizar()">💾</div></div>
+</div>
+
+<!-- ══ REGISTRO USUARIO ══ -->
+<div class="screen" id="s-regusr">
+  <div class="hdr"><div class="logo-box"><span class="ll">LATIN</span><span class="lp">PRODUCTS</span></div><div class="htitle">PANEL<br>SUPERVISOR</div><div class="hbur" onclick="closeSuperMenu();nav('s-dash')"><span></span><span></span><span></span></div></div>
+  <div class="sub">REGISTRO DE USUARIO</div>
+  <div class="desk-side">
+    <div class="desk-logo">
+      <div class="logo-box"><span class="ll">LATIN</span><span class="lp">PRODUCTS</span></div>
+      <div class="desk-app">GEOGESTION</div>
+      <div class="desk-user-lbl" id="desk-uname2">Supervisor</div>
+    </div>
+    <nav class="desk-nav">
+      <div class="dnav-item" id="dn-dash" onclick="nav('s-dash')"><span class="dnico">📊</span>Dashboard</div>
+      <div class="dnav-item act" id="dn-usr" onclick="nav('s-regusr')"><span class="dnico">👤</span>Usuarios</div>
+      <div class="dnav-item" id="dn-cli" onclick="nav('s-regcli')"><span class="dnico">🏪</span>Clientes</div>
+      <div class="dnav-item" id="dn-ruta" onclick="nav('s-ruta')"><span class="dnico">🗺️</span>Rutas</div>
+      <div class="dnav-item" id="dn-rep" onclick="nav('s-rep')"><span class="dnico">📈</span>Reportes</div>
+      <div class="dnav-item" id="dn-aj" onclick="nav('s-ajustes')"><span class="dnico">⚙️</span>Ajustes</div>
+    </nav>
+    <div class="desk-foot"><button onclick="doLogout()">🚪 CERRAR SESIÓN</button></div>
+  </div>
+  <div class="desk-main">
+    <div class="desk-topbar"><div class="desk-pagetitle">Registro de Usuario</div><div class="desk-clock" id="desk-clock2">--:--</div></div>
+    <div class="desk-scroll sb">
+      <div class="desk-2col">
+        <div class="desk-card">
+          <div class="desk-card-title">Datos del Usuario</div>
+          <div class="fc" style="gap:14px;">
+            <div class="fg"><div class="flbl">NOMBRE COMPLETO</div><input class="finput" id="ru-nom" type="text" placeholder="Nombre completo"></div>
+            <div class="fg"><div class="flbl">USUARIO</div><input class="finput" id="ru-usr" type="text" placeholder="usuario123"></div>
+            <div class="fg"><div class="flbl">CONTRASEÑA</div><input class="finput" id="ru-pw" type="password" placeholder="••••••"></div>
+            <div class="fg"><div class="flbl">ASIGNAR ZONA</div>
+              <select class="fsel" id="ru-zona"><option value="">Seleccionar...</option>
+                <option>Zona Norte</option><option>Zona Sur</option><option>Centro</option><option>Oriente</option>
+              </select>
+            </div>
+            <div class="fg"><div class="flbl">TIPO DE ROL</div>
+              <select class="fsel" id="ru-rol"><option value="">Seleccionar...</option>
+                <option>Supervisor</option><option>Vendedor</option><option>Promotor</option><option>Mercaderista</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="desk-card">
+          <div class="desk-card-title" style="display:flex;justify-content:space-between;align-items:center;">
+            <span>Horarios</span>
+            <span onclick="addHorario()" style="color:var(--cyan);font-size:11px;font-weight:700;cursor:pointer;letter-spacing:.5px;">+ Agregar horario</span>
+          </div>
+          <div id="horarios-cont"></div>
+        </div>
+      </div>
+      <div class="desk-card" style="margin-top:20px;">
+        <div class="desk-card-title">Usuarios Registrados</div>
+        <div id="ul-cont" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:10px;"></div>
+      </div>
+    </div>
+    <div class="desk-savebar">
+      <button class="desk-savebtn secondary" onclick="nav('s-dash')">Cancelar</button>
+      <button class="desk-savebtn primary" onclick="doRegUsr()">💾 Guardar Registro</button>
+    </div>
+  </div>
+  <div class="sf"><div class="slbl">GUARDAR REGISTRO</div><div class="sico" onclick="doRegUsr()">💾</div></div>
+</div>
+
+<!-- ══ REGISTRO CLIENTE ══ -->
+<div class="screen" id="s-regcli">
+  <div class="hdr"><div class="logo-box"><span class="ll">LATIN</span><span class="lp">PRODUCTS</span></div><div class="htitle">PANEL<br>SUPERVISOR</div><div class="hbur" onclick="closeSuperMenu();nav('s-dash')"><span></span><span></span><span></span></div></div>
+  <div class="sub">REGISTRO DE CLIENTE</div>
+  <div class="desk-side">
+    <div class="desk-logo">
+      <div class="logo-box"><span class="ll">LATIN</span><span class="lp">PRODUCTS</span></div>
+      <div class="desk-app">GEOGESTION</div>
+      <div class="desk-user-lbl">Supervisor</div>
+    </div>
+    <nav class="desk-nav">
+      <div class="dnav-item" onclick="nav('s-dash')"><span class="dnico">📊</span>Dashboard</div>
+      <div class="dnav-item" onclick="nav('s-regusr')"><span class="dnico">👤</span>Usuarios</div>
+      <div class="dnav-item act" onclick="nav('s-regcli')"><span class="dnico">🏪</span>Clientes</div>
+      <div class="dnav-item" onclick="nav('s-ruta')"><span class="dnico">🗺️</span>Rutas</div>
+      <div class="dnav-item" onclick="nav('s-rep')"><span class="dnico">📈</span>Reportes</div>
+      <div class="dnav-item" onclick="nav('s-ajustes')"><span class="dnico">⚙️</span>Ajustes</div>
+    </nav>
+    <div class="desk-foot"><button onclick="doLogout()">🚪 CERRAR SESIÓN</button></div>
+  </div>
+  <div class="desk-main">
+    <div class="desk-topbar"><div class="desk-pagetitle">Registro de Cliente</div></div>
+    <div class="desk-scroll sb">
+      <div class="desk-2col">
+        <div class="desk-card">
+          <div class="desk-card-title">Datos del Cliente</div>
+          <div class="fc" style="gap:14px;">
+            <div class="fg"><div class="flbl">CLIENTE</div><input class="finput" id="rc-nom" type="text" placeholder="Nombre del cliente"></div>
+            <div class="fg"><div class="flbl">ALMACÉN</div><input class="finput" id="rc-alm" type="text" placeholder="Nombre del almacén"></div>
+            <div class="fg"><div class="flbl">DIRECCIÓN</div><input class="finput" id="rc-dir" type="text" placeholder="Calle, número, barrio"></div>
+            <div class="fg"><div class="flbl" style="display:flex;align-items:center;justify-content:space-between;">
+              <span>CIUDAD</span>
+              <span onclick="toggleAddCity()" style="color:var(--cyan);font-size:11px;font-weight:700;cursor:pointer;">+ Nueva ciudad</span>
+            </div>
+              <select class="fsel" id="rc-ciu"><option value="">Seleccionar...</option>
+                <option>Bogotá</option><option>Medellín</option><option>Cali</option>
+                <option>Barranquilla</option><option>Cartagena</option><option>Bucaramanga</option>
+              </select>
+              <div id="add-city-row" style="display:none;margin-top:6px;flex-direction:row;gap:6px;align-items:center;">
+                <input class="finput" id="new-city-inp" placeholder="Nombre de la ciudad..." style="flex:1;font-size:12px;padding:8px 10px;">
+                <button onclick="doAddCity()" style="padding:8px 13px;background:var(--blue-btn);border:none;border-radius:6px;color:#fff;font-size:11px;font-weight:700;cursor:pointer;">Agregar</button>
+              </div>
+            </div>
+            <div class="fg"><div class="flbl">ZONA</div>
+              <select class="fsel" id="rc-zona"><option value="">Seleccionar...</option>
+                <option>Zona Norte</option><option>Zona Sur</option><option>Centro</option><option>Oriente</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="desk-card">
+          <div class="desk-card-title">Clientes Registrados</div>
+          <div id="cl-cont" style="display:flex;flex-direction:column;gap:8px;"></div>
+        </div>
+      </div>
+    </div>
+    <div class="desk-savebar">
+      <button class="desk-savebtn secondary" onclick="nav('s-dash')">Cancelar</button>
+      <button class="desk-savebtn primary" onclick="doRegCli()">💾 Guardar Registro</button>
+    </div>
+  </div>
+  <div class="sf"><div class="slbl">GUARDAR REGISTRO</div><div class="sico" onclick="doRegCli()">💾</div></div>
+</div>
+
+<!-- ══ REGISTRO RUTA ══ -->
+<div class="screen" id="s-ruta">
+  <div class="hdr"><div class="logo-box"><span class="ll">LATIN</span><span class="lp">PRODUCTS</span></div><div class="htitle">PANEL<br>SUPERVISOR</div><div class="hbur" onclick="closeSuperMenu();nav('s-dash')"><span></span><span></span><span></span></div></div>
+  <div class="sub">REGISTRO DE RUTA</div>
+  <div class="desk-side">
+    <div class="desk-logo">
+      <div class="logo-box"><span class="ll">LATIN</span><span class="lp">PRODUCTS</span></div>
+      <div class="desk-app">GEOGESTION</div>
+      <div class="desk-user-lbl">Supervisor</div>
+    </div>
+    <nav class="desk-nav">
+      <div class="dnav-item" onclick="nav('s-dash')"><span class="dnico">📊</span>Dashboard</div>
+      <div class="dnav-item" onclick="nav('s-regusr')"><span class="dnico">👤</span>Usuarios</div>
+      <div class="dnav-item" onclick="nav('s-regcli')"><span class="dnico">🏪</span>Clientes</div>
+      <div class="dnav-item act" onclick="nav('s-ruta')"><span class="dnico">🗺️</span>Rutas</div>
+      <div class="dnav-item" onclick="nav('s-rep')"><span class="dnico">📈</span>Reportes</div>
+      <div class="dnav-item" onclick="nav('s-ajustes')"><span class="dnico">⚙️</span>Ajustes</div>
+    </nav>
+    <div class="desk-foot"><button onclick="doLogout()">🚪 CERRAR SESIÓN</button></div>
+  </div>
+  <div class="desk-main">
+    <div class="desk-topbar"><div class="desk-pagetitle">Programar Rutas</div></div>
+    <div class="desk-scroll sb">
+      <div class="desk-2col">
+        <div class="desk-card">
+          <div class="desk-card-title">Nueva Ruta</div>
+          <div class="fc" style="gap:14px;">
+            <div class="fg"><div class="flbl">USUARIO</div><select class="fsel" id="rt-usr"><option value="">Seleccionar usuario...</option></select></div>
+            <div class="fg"><div class="flbl">ZONA</div>
+              <select class="fsel" id="rt-zona" onchange="filterCli()"><option value="">Seleccionar...</option>
+                <option>Zona Norte</option><option>Zona Sur</option><option>Centro</option><option>Oriente</option>
+              </select>
+            </div>
+            <div class="rp">
+              <div class="rptitle">CLIENTES EN LA ZONA</div>
+              <div class="rpls">
+                <div class="rpli" id="rt-items"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="desk-card">
+          <div class="desk-card-title">Rutas Guardadas</div>
+          <div id="rt-saved" style="display:flex;flex-direction:column;gap:8px;"></div>
+        </div>
+      </div>
+    </div>
+    <div class="desk-savebar">
+      <button class="desk-savebtn secondary" onclick="nav('s-dash')">Cancelar</button>
+      <button class="desk-savebtn primary" onclick="doRegRuta()">💾 Guardar Ruta</button>
+    </div>
+  </div>
+  <div class="sf"><div class="slbl">GUARDAR REGISTRO</div><div class="sico" onclick="doRegRuta()">💾</div></div>
+</div>
+
+<!-- ══ REPORTES ══ -->
+<div class="screen" id="s-rep">
+  <div class="hdr"><div class="logo-box"><span class="ll">LATIN</span><span class="lp">PRODUCTS</span></div><div class="htitle">PANEL<br>SUPERVISOR</div><div class="hbur" onclick="closeSuperMenu();nav('s-dash')"><span></span><span></span><span></span></div></div>
+  <div class="sub">REPORTE</div>
+  <div class="desk-side">
+    <div class="desk-logo"><div class="logo-box"><span class="ll">LATIN</span><span class="lp">PRODUCTS</span></div><div class="desk-app">GEOGESTION</div><div class="desk-user-lbl">Supervisor</div></div>
+    <nav class="desk-nav">
+      <div class="dnav-item" onclick="nav('s-dash')"><span class="dnico">📊</span>Dashboard</div>
+      <div class="dnav-item" onclick="nav('s-regusr')"><span class="dnico">👤</span>Usuarios</div>
+      <div class="dnav-item" onclick="nav('s-regcli')"><span class="dnico">🏪</span>Clientes</div>
+      <div class="dnav-item" onclick="nav('s-ruta')"><span class="dnico">🗺️</span>Rutas</div>
+      <div class="dnav-item act" onclick="nav('s-rep')"><span class="dnico">📈</span>Reportes</div>
+      <div class="dnav-item" onclick="nav('s-ajustes')"><span class="dnico">⚙️</span>Ajustes</div>
+    </nav>
+    <div class="desk-foot"><button onclick="doLogout()">🚪 CERRAR SESIÓN</button></div>
+  </div>
+  <div class="desk-main">
+    <div class="desk-topbar">
+      <div class="desk-pagetitle">Reportes</div>
+      <div style="display:flex;gap:12px;">
+        <div style="display:flex;align-items:center;gap:7px;cursor:pointer;" onclick="showToast('Exportado como PDF')"><span style="font-size:20px;">📄</span><span style="font-size:12px;font-weight:700;color:#fff;">PDF</span></div>
+        <div style="display:flex;align-items:center;gap:7px;cursor:pointer;" onclick="showToast('Exportado como Excel')"><span style="font-size:20px;">📊</span><span style="font-size:12px;font-weight:700;color:#fff;">EXCEL</span></div>
+      </div>
+    </div>
+    <div class="desk-scroll sb">
+      <div class="desk-card" style="margin-bottom:20px;">
+        <div class="desk-card-title">Filtros</div>
+        <div style="display:flex;gap:16px;flex-wrap:wrap;">
+          <div class="fg" style="flex:1;min-width:160px;"><div class="flbl">FECHA</div>
+            <select class="fsel" id="rp-fecha" onchange="renderRep()">
+              <option value="hoy">Hoy</option><option value="sem">Esta semana</option><option value="mes">Este mes</option>
+            </select>
+          </div>
+          <div class="fg" style="flex:1;min-width:160px;"><div class="flbl">USUARIO</div><select class="fsel" id="rp-usr" onchange="renderRep()"><option value="">Todos</option></select></div>
+          <div class="fg" style="flex:1;min-width:160px;"><div class="flbl">ZONA</div>
+            <select class="fsel" id="rp-zona" onchange="renderRep()"><option value="">Todas</option>
+              <option>Zona Norte</option><option>Zona Sur</option><option>Centro</option><option>Oriente</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="desk-card">
+        <div class="desk-card-title">Resultados</div>
+        <div id="rep-tbl"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ AJUSTES ══ -->
+<div class="screen" id="s-ajustes">
+  <div class="hdr"><div class="logo-box"><span class="ll">LATIN</span><span class="lp">PRODUCTS</span></div><div class="htitle">PANEL<br>SUPERVISOR</div><div class="hbur" onclick="closeSuperMenu();nav('s-dash')"><span></span><span></span><span></span></div></div>
+  <div class="sub">AJUSTES</div>
+  <div class="desk-side">
+    <div class="desk-logo"><div class="logo-box"><span class="ll">LATIN</span><span class="lp">PRODUCTS</span></div><div class="desk-app">GEOGESTION</div><div class="desk-user-lbl">Supervisor</div></div>
+    <nav class="desk-nav">
+      <div class="dnav-item" onclick="nav('s-dash')"><span class="dnico">📊</span>Dashboard</div>
+      <div class="dnav-item" onclick="nav('s-regusr')"><span class="dnico">👤</span>Usuarios</div>
+      <div class="dnav-item" onclick="nav('s-regcli')"><span class="dnico">🏪</span>Clientes</div>
+      <div class="dnav-item" onclick="nav('s-ruta')"><span class="dnico">🗺️</span>Rutas</div>
+      <div class="dnav-item" onclick="nav('s-rep')"><span class="dnico">📈</span>Reportes</div>
+      <div class="dnav-item act" onclick="nav('s-ajustes')"><span class="dnico">⚙️</span>Ajustes</div>
+    </nav>
+    <div class="desk-foot"><button onclick="doLogout()">🚪 CERRAR SESIÓN</button></div>
+  </div>
+  <div class="desk-main">
+    <div class="desk-topbar"><div class="desk-pagetitle">Ajustes</div></div>
+    <div class="desk-scroll sb">
+      <div class="desk-2col">
+        <div class="desk-card">
+          <div class="desk-card-title">Asignación</div>
+          <div class="fc" style="gap:14px;">
+            <div class="fg"><div class="flbl">USUARIO</div><select class="fsel" id="aj-usr"></select></div>
+            <div class="fg"><div class="flbl">CLIENTES</div><select class="fsel" id="aj-cli"></select></div>
+            <div class="fg"><div class="flbl">RUTA</div><select class="fsel" id="aj-ruta"></select></div>
+            <div class="fg"><div class="flbl">ROL</div>
+              <select class="fsel" id="aj-rol"><option value="">Seleccionar...</option>
+                <option>Supervisor</option><option>Promotor</option><option>Mercaderista</option><option>Vendedor</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="desk-card" style="margin-bottom:16px;">
+            <div class="desk-card-title">Resultados de Visita</div>
+            <div class="rpli" id="aj-res">
+              <div class="ritem"><span class="riname">Visita exitosa</span><button class="trsh" onclick="this.parentElement.remove();syncAj()">🗑️</button></div>
+              <div class="ritem"><span class="riname">Producto exhibido OK</span><button class="trsh" onclick="this.parentElement.remove();syncAj()">🗑️</button></div>
+            </div>
+            <div style="display:flex;gap:8px;margin-top:10px;">
+              <input class="finput" id="aj-nres" placeholder="Nuevo resultado..." style="flex:1;font-size:12px;padding:8px 10px;">
+              <button onclick="addAjItem('aj-res','aj-nres')" style="padding:8px 14px;background:var(--blue-btn);border:none;border-radius:6px;color:#fff;font-size:12px;font-weight:700;cursor:pointer;">+ Agregar</button>
+            </div>
+          </div>
+          <div class="desk-card">
+            <div class="desk-card-title">Tipos de Actividad</div>
+            <div class="rpli" id="aj-act">
+              <div class="ritem"><span class="riname">Surtir exhibicion</span><button class="trsh" onclick="this.parentElement.remove();syncAj()">🗑️</button></div>
+              <div class="ritem"><span class="riname">Limpieza</span><button class="trsh" onclick="this.parentElement.remove();syncAj()">🗑️</button></div>
+            </div>
+            <div style="display:flex;gap:8px;margin-top:10px;">
+              <input class="finput" id="aj-nact" placeholder="Nueva actividad..." style="flex:1;font-size:12px;padding:8px 10px;">
+              <button onclick="addAjItem('aj-act','aj-nact')" style="padding:8px 14px;background:var(--blue-btn);border:none;border-radius:6px;color:#fff;font-size:12px;font-weight:700;cursor:pointer;">+ Agregar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="desk-savebar">
+      <button class="desk-savebtn secondary" onclick="nav('s-dash')">Cancelar</button>
+      <button class="desk-savebtn primary" onclick="doSaveAj()">💾 Guardar Ajustes</button>
+    </div>
+  </div>
+  <div class="sf two">
+    <div class="scol"><div class="slbl">GUARDAR</div><div class="sico" onclick="doSaveAj()">💾</div></div>
+    <div class="scol"><div class="slbl">MODIFICAR</div><div class="sico" onclick="showToast('Modo modificación activado')">⚙️</div></div>
+  </div>
+</div>
+
+</div><!-- /phone-frame -->
+
+<!-- ══ MENÚ SUPERVISOR (DRAWER) ══ -->
+<div id="super-overlay" style="display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.55);" onclick="closeSuperMenu()"></div>
+<div id="super-drawer" style="display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:201;background:var(--navy-dark);border-radius:18px;width:340px;padding:0;box-shadow:0 20px 60px rgba(0,0,0,.7);border:1px solid rgba(74,159,212,.25);overflow:hidden;">
+  <div style="background:var(--navy-mid);padding:16px 20px;display:flex;align-items:center;justify-content:space-between;">
+    <div class="logo-box" style="background:#fff;border-radius:6px;padding:3px 7px;"><span class="ll">LATIN</span><span class="lp">PRODUCTS</span></div>
+    <div style="font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:800;color:#fff;letter-spacing:2px;">CONFIGURACIÓN</div>
+    <div onclick="closeSuperMenu()" style="cursor:pointer;font-size:20px;color:rgba(255,255,255,.6);line-height:1;">✕</div>
+  </div>
+  <div style="padding:18px;display:flex;flex-direction:column;gap:10px;">
+    <button class="mbtn" onclick="closeSuperMenu();nav('s-regusr')">👤 REGISTRO DE USUARIO</button>
+    <button class="mbtn" onclick="closeSuperMenu();nav('s-regcli')">🏪 REGISTRO DE CLIENTE</button>
+    <button class="mbtn" onclick="closeSuperMenu();nav('s-ruta')">🗺️ PROGRAMAR RUTAS</button>
+    <button class="mbtn" onclick="closeSuperMenu();nav('s-rep')">📊 REPORTES</button>
+    <button class="mbtn" onclick="closeSuperMenu();nav('s-ajustes')">⚙️ AJUSTES</button>
+  </div>
+</div>
+
+
+
+<script>
+// ════════════════════════════════════════
+//  GLOBAL STATE
+// ════════════════════════════════════════
+const S = {
+  cu: null, // current user
+  activeVid: null,
+  users: [
+    {id:1,nom:'Supervisor General',usr:'supervisor',pw:'1234',zona:'Zona Norte',rol:'Supervisor',online:false,loginTime:null,store:null},
+    {id:2,nom:'Carlos Pérez',      usr:'carlos',    pw:'1234',zona:'Zona Norte',rol:'Mercaderista',online:false,loginTime:null,store:null},
+    {id:3,nom:'María González',    usr:'maria',     pw:'1234',zona:'Zona Sur',  rol:'Promotor',    online:false,loginTime:null,store:null},
+    {id:4,nom:'Pedro Ramírez',     usr:'pedro',     pw:'1234',zona:'Centro',    rol:'Vendedor',    online:false,loginTime:null,store:null},
+  ],
+  clients: [
+    {id:1,nom:'Almacenes Éxito',alm:'Éxito Centro',         dir:'Cra 7 #32-16',      ciu:'Bogotá',    zona:'Centro'},
+    {id:2,nom:'Caribe',         alm:'Caribe Panamericano',   dir:'Av 30 #45-10',      ciu:'Bogotá',    zona:'Zona Norte'},
+    {id:3,nom:'Mercamío',       alm:'Mercamío Calle 5ta',    dir:'Calle 5 #12-8',     ciu:'Cali',      zona:'Zona Sur'},
+    {id:4,nom:'Jumbo',          alm:'Jumbo Norte',           dir:'Cra 15 #100-5',     ciu:'Bogotá',    zona:'Zona Norte'},
+    {id:5,nom:'Olímpica',       alm:'Olímpica Barrio Sur',   dir:'Cra 9 #15-20',      ciu:'Medellín',  zona:'Zona Sur'},
+    {id:6,nom:'D1',             alm:'D1 Centro',             dir:'Calle 12 #8-45',    ciu:'Bogotá',    zona:'Centro'},
+  ],
+  routes: [
+    {id:1,uid:2,zona:'Zona Norte',alms:[2,4]},
+    {id:2,uid:3,zona:'Zona Sur',  alms:[3,5]},
+  ],
+  visits: [],
+  nv: 1,
+  aj: {
+    res:  ['Visita exitosa','Producto exhibido OK','Cliente ausente','Sin pedido','Visita reagendada'],
+    acts: ['Surtir exhibicion','Limpieza','Verificación de inventario','Impulso de producto','Capacitación'],
+  }
+};
+
+// ── SUPER MENU ──
+function openSuperMenu(){
+  document.getElementById('super-overlay').style.display='block';
+  document.getElementById('super-drawer').style.display='block';
+}
+function closeSuperMenu(){
+  document.getElementById('super-overlay').style.display='none';
+  document.getElementById('super-drawer').style.display='none';
+}
+
+// ── NAV ──
+function nav(id) {
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  const sc=document.getElementById(id);
+  if(sc) sc.classList.add('active');
+  // Sync sidebar active state on all screens
+  document.querySelectorAll('.dnav-item').forEach(el=>{
+    el.classList.remove('act');
+    if(el.getAttribute('onclick')&&el.getAttribute('onclick').includes("'"+id+"'"))el.classList.add('act');
+  });
+  if(id==='s-dash')    renderDash();
+  if(id==='s-ruta')    initRutaSelects();
+  if(id==='s-regusr')  renderUL();
+  if(id==='s-regcli')  renderCL();
+  if(id==='s-rep')     {initRepSelects();renderRep();}
+  if(id==='s-ajustes') initAjSelects();
+  if(id==='s-user')    renderUP();
+}
+
+// ── TOAST ──
+function showToast(msg,type='ok') {
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.className='toast'+(type==='err'?' err':'');
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2800);
+}
+
+// ── CLOCK ──
+function tick() {
+  const t=new Date().toLocaleTimeString('es-CO',{hour:'2-digit',minute:'2-digit'});
+  const a=document.getElementById('uclock'); if(a)a.textContent=t;
+  const b=document.getElementById('fclock'); if(b)b.textContent=t;
+  document.querySelectorAll('.desk-clock').forEach(c=>c.textContent=t);
+}
+setInterval(tick,1000); tick();
+
+// ── LOGIN ──
+function doLogin() {
+  const u=document.getElementById('li-u').value.trim();
+  const p=document.getElementById('li-p').value;
+  const user=S.users.find(x=>x.usr===u&&x.pw===p);
+  if(!user){document.getElementById('lerr').style.display='block';return;}
+  document.getElementById('lerr').style.display='none';
+  user.online=true; user.loginTime=Date.now(); S.cu=user;
+  if(user.rol==='Supervisor'||user.rol==='Admin'){renderDash();nav('s-dash');}
+  else{assignVisits(user);renderUP();nav('s-user');}
+  showToast('Bienvenido, '+user.nom.split(' ')[0]+'!');
+}
+function doLogout(){
+  if(S.cu){S.cu.online=false;S.cu.store=null;S.cu.loginTime=null;S.cu=null;}
+  S.activeVid=null;
+  document.getElementById('li-u').value='';
+  document.getElementById('li-p').value='';
+  nav('s-login'); showToast('Sesión cerrada');
+}
+
+// ── ASSIGN VISITS ──
+function assignVisits(user) {
+  S.visits=S.visits.filter(v=>v.uid!==user.id||v.status==='completed');
+  const rt=S.routes.find(r=>r.uid===user.id);
+  if(!rt)return;
+  rt.alms.forEach(cid=>{
+    const c=S.clients.find(x=>x.id===cid);
+    if(c) S.visits.push({id:S.nv++,uid:user.id,cid:c.id,cn:c.alm,ca:c.dir+' – '+c.ciu,zona:c.zona,
+      startTime:null,endTime:null,res:'',act:'',obs:'',status:'pending',ts:null,elapsed:0});
+  });
+}
+
+// ── RENDER USER PANEL ──
+function renderUP() {
+  const u=S.cu; if(!u)return;
+  const ini=u.nom.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+  document.getElementById('u-av').textContent=ini;
+  document.getElementById('u-name').textContent=u.nom;
+  const rt=S.routes.find(r=>r.uid===u.id);
+  document.getElementById('u-route').textContent=(u.zona||'-')+(rt?' · Ruta #'+rt.id:'');
+  const mv=S.visits.filter(v=>v.uid===u.id);
+  const comp=mv.filter(v=>v.status==='completed').length;
+  const pend=mv.filter(v=>v.status!=='completed').length;
+  const ms=mv.reduce((s,v)=>s+(v.elapsed||0),0);
+  document.getElementById('u-asig').textContent=mv.length;
+  document.getElementById('u-comp').textContent=comp;
+  document.getElementById('u-pend').textContent=pend;
+  document.getElementById('u-time').textContent=Math.floor(ms/3600000)+'h';
+  const cont=document.getElementById('u-visits');
+  if(!mv.length){cont.innerHTML='<div class="novmsg">Sin visitas asignadas</div>';return;}
+  cont.innerHTML=mv.map(v=>{
+    const isA=v.status==='active', isD=v.status==='completed';
+    const el=isA?Math.floor((Date.now()-(v.ts||Date.now()))/1000)+Math.floor((v.elapsed||0)/1000):Math.floor((v.elapsed||0)/1000);
+    const mm=String(Math.floor(el/60)).padStart(2,'0'), ss=String(el%60).padStart(2,'0');
+    const bg=isD?'#e8faf0':isA?'#0d2a3a':'var(--card-bg)';
+    const bc=isD?'#22c55e':isA?'#00a8c0':'rgba(74,159,212,.3)';
+    const nameColor=isD?'#0a3d1f':'#fff';
+    const addrColor=isD?'#1a5c35':isA?'rgba(255,255,255,.55)':'var(--cyan-light)';
+    return `<div class="vc" style="background:${bg};border-color:${bc};">
+      <div class="vch">
+        <div class="mico">${isD?'✅':isA?'🔴':'📍'}</div>
+        <div class="vci">
+          <div class="vcn" style="color:${nameColor};">${v.cn}</div>
+          <div class="vca" style="color:${addrColor};">📌 ${v.ca}</div>
+          <div class="vrole" style="${isD?'background:#16a34a;':''}"> ${u.rol}</div>
+        </div>
+      </div>
+      ${!isD?`<div class="vta"><div class="vtlbl">Tiempo en Visita</div><div class="vtd" id="tmr-${v.id}">${mm}:${ss}</div></div>
+      <div style="display:flex;gap:8px;padding:9px 14px;">
+        ${!isA?`<button class="fbtn" style="margin:0;flex:1;background:linear-gradient(135deg,#1a6a1a,var(--green));" onclick="startV(${v.id})">▶ Iniciar Visita</button>`:''}
+        ${isA?`<button class="fbtn" style="margin:0;flex:1;" onclick="prepFin(${v.id})">Finalizar Visita</button>`:''}
+      </div>`:`<div style="padding:10px 14px;font-size:12px;font-weight:800;color:#0a3d1f;background:rgba(34,197,94,.15);border-top:1px solid rgba(34,197,94,.3);">✓ ${v.res||'Completada'} — ${v.act||''}</div>`}
+    </div>`;
+  }).join('');
+}
+
+function startV(vid) {
+  const v=S.visits.find(x=>x.id===vid); if(!v)return;
+  S.visits.filter(x=>x.uid===S.cu.id&&x.status==='active').forEach(x=>{
+    x.elapsed+=(Date.now()-(x.ts||Date.now())); x.status='pending'; x.ts=null;
+  });
+  v.status='active'; v.startTime=Date.now(); v.ts=Date.now();
+  S.activeVid=vid; S.cu.store=v.cn;
+  renderUP(); showToast('Visita iniciada: '+v.cn);
+}
+function prepFin(vid) {
+  S.activeVid=vid;
+  const v=S.visits.find(x=>x.id===vid);
+  document.getElementById('fin-cn').textContent=v.cn;
+  document.getElementById('fin-ca').textContent=v.ca;
+  const sr=document.getElementById('fin-res'), sa=document.getElementById('fin-act');
+  sr.innerHTML='<option value="">Seleccionar...</option>'+S.aj.res.map(r=>`<option>${r}</option>`).join('');
+  sa.innerHTML='<option value="">Seleccionar...</option>'+S.aj.acts.map(a=>`<option>${a}</option>`).join('');
+  document.getElementById('fin-obs').value='';
+  nav('s-fin');
+}
+function doFinalizar() {
+  const res=document.getElementById('fin-res').value;
+  const act=document.getElementById('fin-act').value;
+  const obs=document.getElementById('fin-obs').value;
+  if(!res||!act){showToast('Selecciona resultado y actividad','err');return;}
+  const v=S.visits.find(x=>x.id===S.activeVid);
+  if(v){v.res=res;v.act=act;v.obs=obs;v.endTime=Date.now();
+    v.elapsed+=(Date.now()-(v.ts||Date.now()));v.ts=null;v.status='completed';}
+  if(S.cu)S.cu.store=null;
+  S.activeVid=null;
+  showToast('Visita finalizada ✓');
+  renderUP(); nav('s-user');
+}
+
+// Live timer
+setInterval(()=>{
+  S.visits.filter(v=>v.status==='active').forEach(v=>{
+    const el=document.getElementById('tmr-'+v.id); if(!el)return;
+    const sec=Math.floor((Date.now()-(v.ts||Date.now()))/1000)+Math.floor((v.elapsed||0)/1000);
+    el.textContent=String(Math.floor(sec/60)).padStart(2,'0')+':'+String(sec%60).padStart(2,'0');
+  });
+},1000);
+
+// ── DASHBOARD ──
+function renderDash() {
+  const ui=document.getElementById('dash-user-info');
+  if(ui&&S.cu)ui.textContent=S.cu.nom.split(' ')[0];
+  document.querySelectorAll('.desk-user-lbl').forEach(e=>{if(S.cu)e.textContent=S.cu.nom.split(' ')[0];});
+  const online=S.users.filter(u=>u.online);
+  const all=S.visits;
+  const comp=all.filter(v=>v.status==='completed').length;
+  const pend=all.filter(v=>v.status!=='completed').length;
+  document.getElementById('d-online').textContent=online.length;
+  document.getElementById('d-total').textContent=all.length;
+  document.getElementById('d-comp').textContent=comp;
+  document.getElementById('d-pend').textContent=pend;
+
+  // Group online users by store
+  const onlineEl=document.getElementById('d-online-list');
+  if(!online.length){onlineEl.innerHTML='<div class="nodata">No hay usuarios en línea</div>';}
+  else {
+    // Build store groups
+    const groups={};
+    online.forEach(u=>{
+      const av=S.visits.find(v=>v.uid===u.id&&v.status==='active');
+      const storeName=av?av.cn:(u.store||u.zona||'Sin almacén activo');
+      if(!groups[storeName])groups[storeName]=[];
+      groups[storeName].push({u,av});
+    });
+    onlineEl.innerHTML=Object.entries(groups).map(([store,list])=>`
+      <div style="margin-bottom:10px;">
+        <div style="font-size:10px;font-weight:800;color:var(--cyan);letter-spacing:.5px;margin-bottom:5px;padding-left:4px;">📦 ${store}</div>
+        ${list.map(({u,av})=>{
+          const ini=u.nom.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+          const elapsed=u.loginTime?Math.floor((Date.now()-u.loginTime)/60000):0;
+          const isBusy=!!av;
+          return `<div class="ouc">
+            <div class="${isBusy?'odot busy':'odot'}"></div>
+            <div class="ouav">${ini}</div>
+            <div class="ouinfo">
+              <div class="ouname">${u.nom}</div>
+              <div class="oustore">${u.rol} · ${u.zona}</div>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:flex-end;gap:3px;">
+              <span class="oustatus ${isBusy?'stvisit':'stactive'}">${isBusy?'EN VISITA':'EN LÍNEA'}</span>
+              <span class="outime">${elapsed}min</span>
+            </div>
+          </div>`;
+        }).join('')}
+      </div>`).join('');
+  }
+
+  // Recent visits
+  const rec=document.getElementById('d-recent');
+  const rv=[...S.visits].sort((a,b)=>(b.endTime||b.startTime||0)-(a.endTime||a.startTime||0)).slice(0,8);
+  if(!rv.length){rec.innerHTML='<div class="nodata">Sin visitas registradas</div>';}
+  else rec.innerHTML=rv.map(v=>{
+    const u=S.users.find(x=>x.id===v.uid);
+    const done=v.status==='completed';
+    return `<div class="vrecent ${done?'':'pend'}">
+      <div class="vrc">${v.cn}</div>
+      <div class="vrm">${u?u.nom:'-'} · ${v.zona}</div>
+      <div class="vrr ${done?'':'pend'}">${done?'✓ '+v.res:'⏳ '+v.status}</div>
+    </div>`;
+  }).join('');
+}
+setInterval(()=>{
+  if(document.getElementById('s-dash').classList.contains('active'))renderDash();
+},5000);
+
+// ── HORARIOS MÚLTIPLES ──
+function collectHorarios(){
+  return [...document.querySelectorAll('.horario-block')].map(b=>({
+    entrada: b.querySelector('.eh').value+':'+b.querySelector('.em').value,
+    salida:  b.querySelector('.sh').value+':'+b.querySelector('.sm').value,
+    dias:[...b.querySelectorAll('.dchk:checked')].map(c=>c.dataset.day)
+  }));
+}
+function resetHorarios(){
+  const c=document.getElementById('horarios-cont');
+  c.innerHTML='';
+  addHorario();
+}
+let _hid=0;
+function addHorario(){
+  const c=document.getElementById('horarios-cont');
+  const id='h'+(_hid++);
+  const d=document.createElement('div');
+  d.className='horario-block';
+  d.style.cssText='background:rgba(255,255,255,.05);border:1px solid rgba(74,159,212,.2);border-radius:8px;padding:10px;margin-bottom:8px;position:relative;';
+  d.innerHTML=`
+    <button onclick="this.parentElement.remove()" style="position:absolute;top:6px;right:8px;background:none;border:none;color:rgba(255,255,255,.4);font-size:13px;cursor:pointer;">✕</button>
+    <div class="sdays" style="margin-bottom:8px;">
+      <div class="dc"><span class="dlbl">LUN</span><input type="checkbox" class="dchk" data-day="LUN"></div>
+      <div class="dc"><span class="dlbl">MAR</span><input type="checkbox" class="dchk" data-day="MAR"></div>
+      <div class="dc"><span class="dlbl">MIE</span><input type="checkbox" class="dchk" data-day="MIE"></div>
+      <div class="dc"><span class="dlbl">JUE</span><input type="checkbox" class="dchk" data-day="JUE"></div>
+      <div class="dc"><span class="dlbl">VIE</span><input type="checkbox" class="dchk" data-day="VIE"></div>
+      <div class="dc"><span class="dlbl">SAB</span><input type="checkbox" class="dchk" data-day="SAB"></div>
+      <div class="dc"><span class="dlbl">DOM</span><input type="checkbox" class="dchk" data-day="DOM"></div>
+    </div>
+    <div style="display:flex;gap:18px;flex-wrap:wrap;">
+      <div><div class="tlbl">HORA DE ENTRADA:</div>
+        <div class="trow">
+          <div style="display:flex;flex-direction:column;align-items:center;"><input class="tinput eh" type="text" maxlength="2" placeholder="08"><div class="tsub">HORA</div></div>
+          <span class="tcol">:</span>
+          <div style="display:flex;flex-direction:column;align-items:center;"><input class="tinput em" type="text" maxlength="2" placeholder="00"><div class="tsub">MIN</div></div>
+          <span class="tampm">A.M</span>
+        </div>
+      </div>
+      <div><div class="tlbl">HORA DE SALIDA:</div>
+        <div class="trow">
+          <div style="display:flex;flex-direction:column;align-items:center;"><input class="tinput sh" type="text" maxlength="2" placeholder="05"><div class="tsub">HORA</div></div>
+          <span class="tcol">:</span>
+          <div style="display:flex;flex-direction:column;align-items:center;"><input class="tinput sm" type="text" maxlength="2" placeholder="00"><div class="tsub">MIN</div></div>
+          <span class="tampm">P.M</span>
+        </div>
+      </div>
+    </div>`;
+  c.appendChild(d);
+}
+
+// ── REG USUARIO ──
+function doRegUsr(){
+  const nom=document.getElementById('ru-nom').value.trim();
+  const usr=document.getElementById('ru-usr').value.trim();
+  const pw=document.getElementById('ru-pw').value;
+  const zona=document.getElementById('ru-zona').value;
+  const rol=document.getElementById('ru-rol').value;
+  if(!nom||!usr||!pw||!zona||!rol){showToast('Completa todos los campos','err');return;}
+  const dias=[...document.querySelectorAll('.dchk:checked')].map(c=>c.dataset.day);
+  // collect all schedule blocks
+  const horarios=collectHorarios();
+  if(S._editUid){
+    const u=S.users.find(x=>x.id===S._editUid);
+    if(u){Object.assign(u,{nom,usr,pw,zona,rol,dias,horarios});}
+    S._editUid=null;
+    document.querySelector('#s-regusr .slbl').textContent='GUARDAR REGISTRO';
+    showToast('Usuario "'+usr+'" actualizado ✓');
+  } else {
+    if(S.users.find(u=>u.usr===usr)){showToast('Usuario ya existe','err');return;}
+    S.users.push({id:S.users.length+1,nom,usr,pw,zona,rol,dias,horarios,online:false,loginTime:null,store:null,active:true});
+    showToast('Usuario "'+usr+'" creado ✓');
+  }
+  ['ru-nom','ru-usr','ru-pw'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('ru-zona').value=''; document.getElementById('ru-rol').value='';
+  document.querySelectorAll('.dchk').forEach(c=>c.checked=false);
+  resetHorarios();
+  renderUL();
+}
+function renderUL(){
+  document.getElementById('ul-cont').innerHTML=S.users.map(u=>`
+    <div class="uitem" style="flex-direction:column;align-items:stretch;gap:6px;">
+      <div style="display:flex;align-items:center;gap:9px;">
+        <div class="uiav" style="background:${u.active===false?'rgba(255,255,255,.1)':'var(--navy-mid)'};border-color:${u.active===false?'rgba(255,255,255,.2)':'var(--cyan)'};">${u.nom.split(' ').map(w=>w[0]).join('').slice(0,2)}</div>
+        <div class="uii"><div class="uin">${u.nom}</div><div class="uim">${u.usr} · ${u.rol} · ${u.zona}</div></div>
+        <div class="uidot" style="background:${u.online?'var(--green)':'rgba(255,255,255,.2)'};"></div>
+      </div>
+      <div style="display:flex;gap:5px;padding-left:2px;">
+        <button onclick="editUser(${u.id})" style="flex:1;padding:5px 0;background:rgba(74,159,212,.2);border:1px solid rgba(74,159,212,.4);border-radius:8px;color:#fff;font-size:9px;font-weight:700;cursor:pointer;letter-spacing:.5px;">✏️ MODIFICAR</button>
+        <button onclick="toggleUserActive(${u.id})" style="flex:1;padding:5px 0;background:${u.active===false?'rgba(34,197,94,.15)':'rgba(239,68,68,.15)'};border:1px solid ${u.active===false?'rgba(34,197,94,.4)':'rgba(239,68,68,.4)'};border-radius:8px;color:${u.active===false?'var(--green)':'var(--red)'};font-size:9px;font-weight:700;cursor:pointer;letter-spacing:.5px;">${u.active===false?'✅ ACTIVAR':'🔴 INACTIVAR'}</button>
+      </div>
+    </div>`).join('');
+}
+
+function toggleUserActive(uid){
+  const u=S.users.find(x=>x.id===uid);
+  if(!u)return;
+  u.active=u.active===false?true:false;
+  showToast(u.nom.split(' ')[0]+' '+(u.active===false?'inactivado':'activado')+' ✓');
+  renderUL();
+}
+function editUser(uid){
+  const u=S.users.find(x=>x.id===uid); if(!u)return;
+  document.getElementById('ru-nom').value=u.nom;
+  document.getElementById('ru-usr').value=u.usr;
+  document.getElementById('ru-pw').value=u.pw;
+  document.getElementById('ru-zona').value=u.zona;
+  document.getElementById('ru-rol').value=u.rol;
+  // mark editing
+  S._editUid=uid;
+  document.querySelector('#s-regusr .slbl').textContent='GUARDAR CAMBIOS';
+  showToast('Editando: '+u.nom.split(' ')[0]);
+  window.scrollTo(0,0);
+}
+
+// ── REG CLIENTE ──
+function doRegCli(){
+  const nom=document.getElementById('rc-nom').value.trim();
+  const alm=document.getElementById('rc-alm').value.trim();
+  const dir=document.getElementById('rc-dir').value.trim();
+  const ciu=document.getElementById('rc-ciu').value;
+  const zona=document.getElementById('rc-zona').value;
+  if(!nom||!alm||!dir||!ciu||!zona){showToast('Completa todos los campos','err');return;}
+  if(S._editCid){
+    const c=S.clients.find(x=>x.id===S._editCid);
+    if(c){Object.assign(c,{nom,alm,dir,ciu,zona});}
+    S._editCid=null;
+    document.querySelector('#s-regcli .slbl').textContent='GUARDAR REGISTRO';
+    showToast('Cliente "'+alm+'" actualizado ✓');
+  } else {
+    S.clients.push({id:Date.now(),nom,alm,dir,ciu,zona});
+    showToast('Cliente "'+alm+'" registrado ✓');
+  }
+  ['rc-nom','rc-alm','rc-dir'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('rc-ciu').value=''; document.getElementById('rc-zona').value='';
+  renderCL();
+}
+function renderCL(){
+  document.getElementById('cl-cont').innerHTML=S.clients.map(c=>`
+    <div style="background:rgba(255,255,255,.06);border-radius:8px;padding:9px 11px;">
+      <div style="font-size:12px;font-weight:700;color:#fff;">${c.alm}</div>
+      <div style="font-size:10px;color:var(--cyan-light);margin-top:2px;">${c.nom} · ${c.ciu} · ${c.zona}</div>
+      <div style="display:flex;gap:5px;margin-top:7px;">
+        <button onclick="editClient(${c.id})" style="flex:1;padding:5px 0;background:rgba(74,159,212,.2);border:1px solid rgba(74,159,212,.4);border-radius:7px;color:#fff;font-size:9px;font-weight:700;cursor:pointer;">✏️ EDITAR</button>
+        <button onclick="deleteClient(${c.id})" style="flex:1;padding:5px 0;background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.35);border-radius:7px;color:var(--red);font-size:9px;font-weight:700;cursor:pointer;">🗑️ ELIMINAR</button>
+      </div>
+    </div>`).join('');
+}
+function editClient(cid){
+  const c=S.clients.find(x=>x.id===cid); if(!c)return;
+  document.getElementById('rc-nom').value=c.nom;
+  document.getElementById('rc-alm').value=c.alm;
+  document.getElementById('rc-dir').value=c.dir;
+  document.getElementById('rc-ciu').value=c.ciu;
+  document.getElementById('rc-zona').value=c.zona;
+  S._editCid=cid;
+  document.querySelector('#s-regcli .slbl').textContent='GUARDAR CAMBIOS';
+  showToast('Editando: '+c.alm);
+}
+function deleteClient(cid){
+  S.clients=S.clients.filter(x=>x.id!==cid);
+  showToast('Cliente eliminado');
+  renderCL();
+}
+
+function toggleAddCity(){
+  const r=document.getElementById('add-city-row');
+  r.style.display=r.style.display==='none'||r.style.display===''?'flex':'none';
+}
+function doAddCity(){
+  const inp=document.getElementById('new-city-inp');
+  const v=inp.value.trim(); if(!v)return;
+  const sel=document.getElementById('rc-ciu');
+  if([...sel.options].some(o=>o.value===v)){showToast('Ciudad ya existe','err');return;}
+  const o=document.createElement('option'); o.value=v; o.textContent=v;
+  sel.appendChild(o); sel.value=v;
+  inp.value='';
+  document.getElementById('add-city-row').style.display='none';
+  showToast('Ciudad "'+v+'" agregada ✓');
+}
+
+// ── RUTAS ──
+function initRutaSelects(){
+  const su=document.getElementById('rt-usr');
+  su.innerHTML='<option value="">Seleccionar usuario...</option>'+
+    S.users.filter(u=>u.active!==false).map(u=>`<option value="${u.id}">${u.nom} (${u.rol})</option>`).join('');
+  document.getElementById('rt-zona').value='';
+  document.getElementById('rt-items').innerHTML='';
+  renderSaved();
+}
+function filterCli(){
+  const zona=document.getElementById('rt-zona').value;
+  const cls=zona?S.clients.filter(c=>c.zona===zona):S.clients;
+  const list=document.getElementById('rt-items');
+  list.innerHTML=cls.map(c=>`
+    <div class="ritem" data-cid="${c.id}">
+      <span class="riname">${c.alm} <span style="font-size:9px;color:#1a4a6b;">(${c.dir})</span></span>
+      <button class="trsh" onclick="this.parentElement.remove()">🗑️</button>
+    </div>`).join('');
+}
+function addRtItem(){
+  // kept for compatibility - now filterCli populates list
+  showToast('Selecciona una zona para ver clientes','err');
+}
+function doRegRuta(){
+  const uid=parseInt(document.getElementById('rt-usr').value);
+  const zona=document.getElementById('rt-zona').value;
+  if(!uid||!zona){showToast('Selecciona usuario y zona','err');return;}
+  const items=[...document.querySelectorAll('#rt-items .ritem')];
+  if(!items.length){showToast('La zona no tiene clientes asignados','err');return;}
+  const alms=items.map(i=>parseInt(i.dataset.cid)).filter(Boolean);
+  if(S._editRid){
+    const r=S.routes.find(x=>x.id===S._editRid);
+    if(r){r.uid=uid;r.zona=zona;r.alms=alms;}
+    S._editRid=null;
+    document.querySelector('#s-ruta .slbl').textContent='GUARDAR REGISTRO';
+    showToast('Ruta actualizada ✓');
+  } else {
+    const ex=S.routes.find(r=>r.uid===uid);
+    if(ex){ex.zona=zona;ex.alms=alms;}
+    else S.routes.push({id:Date.now(),uid,zona,alms});
+    showToast('Ruta guardada ✓');
+  }
+  document.getElementById('rt-items').innerHTML='';
+  document.getElementById('rt-usr').value='';
+  document.getElementById('rt-zona').value='';
+  renderSaved();
+}
+function renderSaved(){
+  document.getElementById('rt-saved').innerHTML=S.routes.map(r=>{
+    const u=S.users.find(x=>x.id===r.uid);
+    const stores=r.alms.map(id=>{const c=S.clients.find(x=>x.id===id);return c?c.alm:'?';}).join(', ');
+    return `<div style="background:rgba(255,255,255,.06);border-radius:8px;padding:9px 11px;">
+      <div style="font-size:12px;font-weight:700;color:#fff;">${u?u.nom:'?'} · ${r.zona}</div>
+      <div style="font-size:10px;color:var(--cyan-light);margin-top:2px;">📦 ${stores}</div>
+      <div style="display:flex;gap:5px;margin-top:7px;">
+        <button onclick="editRoute(${r.id})" style="flex:1;padding:5px 0;background:rgba(74,159,212,.2);border:1px solid rgba(74,159,212,.4);border-radius:7px;color:#fff;font-size:9px;font-weight:700;cursor:pointer;">✏️ EDITAR</button>
+        <button onclick="deleteRoute(${r.id})" style="flex:1;padding:5px 0;background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.35);border-radius:7px;color:var(--red);font-size:9px;font-weight:700;cursor:pointer;">🗑️ ELIMINAR</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+function editRoute(rid){
+  const r=S.routes.find(x=>x.id===rid); if(!r)return;
+  document.getElementById('rt-usr').value=r.uid;
+  document.getElementById('rt-zona').value=r.zona;
+  filterCli();
+  // keep only alms that belong to this route
+  const items=[...document.querySelectorAll('#rt-items .ritem')];
+  items.forEach(el=>{
+    if(!r.alms.includes(parseInt(el.dataset.cid)))el.remove();
+  });
+  S._editRid=rid;
+  document.querySelector('#s-ruta .slbl').textContent='ACTUALIZAR RUTA';
+  showToast('Editando ruta de '+document.getElementById('rt-usr').options[document.getElementById('rt-usr').selectedIndex]?.text);
+}
+function deleteRoute(rid){
+  S.routes=S.routes.filter(x=>x.id!==rid);
+  showToast('Ruta eliminada');
+  renderSaved();
+}
+
+// ── REPORTES ──
+function initRepSelects(){
+  const s=document.getElementById('rp-usr');
+  s.innerHTML='<option value="">Todos</option>'+S.users.map(u=>`<option value="${u.id}">${u.nom}</option>`).join('');
+}
+function renderRep(){
+  const uid=document.getElementById('rp-usr').value;
+  const zona=document.getElementById('rp-zona').value;
+  let vs=[...S.visits];
+  if(uid)vs=vs.filter(v=>v.uid===parseInt(uid));
+  if(zona)vs=vs.filter(v=>v.zona===zona);
+  const c=document.getElementById('rep-tbl');
+  if(!vs.length){c.innerHTML='<div style="color:rgba(255,255,255,.25);text-align:center;font-size:12px;padding:18px;">Sin resultados</div>';return;}
+  c.innerHTML=`<table class="rtbl"><thead><tr><th>Almacén</th><th>Usuario</th><th>Resultado</th><th>Estado</th></tr></thead><tbody>
+  ${vs.map(v=>{
+    const u=S.users.find(x=>x.id===v.uid);
+    const done=v.status==='completed';
+    return `<tr><td>${v.cn}</td><td>${u?u.nom.split(' ')[0]:'-'}</td><td style="font-size:10px;">${v.res||'—'}</td><td><span class="bdg ${done?'g':'o'}">${done?'OK':'Pend'}</span></td></tr>`;
+  }).join('')}</tbody></table>`;
+}
+
+// ── AJUSTES ──
+function initAjSelects(){
+  const su=document.getElementById('aj-usr');
+  su.innerHTML='<option value="">Seleccionar...</option>'+S.users.map(u=>`<option value="${u.id}">${u.nom}</option>`).join('');
+  const sc=document.getElementById('aj-cli');
+  sc.innerHTML='<option value="">Seleccionar...</option>'+S.clients.map(c=>`<option value="${c.id}">${c.alm}</option>`).join('');
+  const sr=document.getElementById('aj-ruta');
+  sr.innerHTML='<option value="">Seleccionar...</option>'+S.routes.map(r=>{
+    const u=S.users.find(x=>x.id===r.uid);
+    return `<option value="${r.id}">Ruta ${r.id} – ${u?u.nom.split(' ')[0]:'?'} (${r.zona})</option>`;
+  }).join('');
+}
+function addAjItem(lid,iid){
+  const inp=document.getElementById(iid), val=inp.value.trim();
+  if(!val)return;
+  const list=document.getElementById(lid);
+  const d=document.createElement('div'); d.className='ritem';
+  d.innerHTML=`<span class="riname">${val}</span><button class="trsh" onclick="this.parentElement.remove();syncAj()">🗑️</button>`;
+  list.appendChild(d); inp.value=''; syncAj();
+}
+function syncAj(){
+  S.aj.res=[...document.querySelectorAll('#aj-res .riname')].map(e=>e.textContent);
+  S.aj.acts=[...document.querySelectorAll('#aj-act .riname')].map(e=>e.textContent);
+}
+function doSaveAj(){syncAj();showToast('Ajustes guardados ✓');}
+
+// ── INIT ──
+renderUL(); renderCL();
+resetHorarios();
+</script>
+</body>
+</html>
