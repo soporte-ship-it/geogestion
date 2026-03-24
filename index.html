@@ -751,107 +751,132 @@ body.sup-mode .phone-frame{width:100%;min-height:100vh;border-radius:0;box-shado
 // ════════════════════════════════════════
 const SUPA_URL = 'https://sxkizjpgazczdkiageal.supabase.co';
 const SUPA_KEY = 'sb_publishable_UtG0ELBTa6HCbj-goThb7A_MRv8A11o';
-const db = supabase.createClient(SUPA_URL, SUPA_KEY);
+const db = supabase.createClient(SUPA_URL, SUPA_KEY, {
+  realtime: { params: { eventsPerSecond: 10 } }
+});
+
+let _realtimeStarted = false;
 
 // Carga datos desde Supabase al iniciar
 async function loadFromDB() {
-  showToast('Cargando datos...', 'ok');
+  showToast('Conectando con servidor...', 'ok');
   try {
-    const [{ data: users }, { data: clients }, { data: routes }, { data: visits }, { data: aj }] = await Promise.all([
+    const [r1, r2, r3, r4] = await Promise.all([
       db.from('usuarios').select('*'),
       db.from('clientes').select('*'),
       db.from('rutas').select('*'),
       db.from('visitas').select('*'),
-      db.from('ajustes').select('*').eq('id', 1).single(),
     ]);
-    if (users?.length)   S.users   = users.map(u=>({...u, online:false, loginTime:null, store:null}));
-    if (clients?.length) S.clients = clients;
-    if (routes?.length)  S.routes  = routes.map(r=>({...r, alms: r.alms||[]}));
-    if (visits?.length)  S.visits  = visits;
-    if (aj) { S.aj.res = aj.res||S.aj.res; S.aj.acts = aj.acts||S.aj.acts; }
-    showToast('Datos cargados ✓');
+
+    if (r1.error) throw r1.error;
+
+    if (r1.data?.length) S.users   = r1.data.map(u=>({...u, online:u.online||false, loginTime:null, store:null}));
+    if (r2.data?.length) S.clients = r2.data;
+    if (r3.data?.length) S.routes  = r3.data.map(r=>({...r, alms: Array.isArray(r.alms)?r.alms:[]}));
+    if (r4.data?.length) S.visits  = r4.data.map(v=>({...v, ts:null, startTime:v.starttime, endTime:v.endtime}));
+
+    showToast('✓ Datos cargados — ' + (r1.data?.length||0) + ' usuarios');
+    startRealtimeSync();
   } catch(e) {
-    showToast('Sin conexión — modo local', 'err');
+    console.error('Supabase error:', e);
+    showToast('⚠️ Sin conexión — modo local', 'err');
   }
 }
 
-// Guarda usuario en Supabase
+// ── GUARDAR EN SUPABASE ──
 async function saveToDB_user(u) {
-  const { error } = await db.from('usuarios').upsert({
-    id: u.id, nom: u.nom, usr: u.usr, pw: u.pw,
-    zona: u.zona, rol: u.rol, tel: u.tel||''
-  });
-  if (error) showToast('Error guardando usuario', 'err');
+  const {error} = await db.from('usuarios').upsert({
+    id:u.id, nom:u.nom, usr:u.usr, pw:u.pw,
+    zona:u.zona, rol:u.rol, tel:u.tel||'', active:u.active!==false
+  }, {onConflict:'id'});
+  if(error) { console.error('saveToDB_user:', error); showToast('Error guardando usuario','err'); }
 }
 
-// Guarda cliente en Supabase
 async function saveToDB_client(c) {
-  const { error } = await db.from('clientes').upsert({
-    id: c.id, nom: c.nom, alm: c.alm,
-    dir: c.dir, ciu: c.ciu, zona: c.zona, tel: c.tel||''
-  });
-  if (error) showToast('Error guardando cliente', 'err');
+  const {error} = await db.from('clientes').upsert({
+    id:c.id, nom:c.nom, alm:c.alm,
+    dir:c.dir, ciu:c.ciu, zona:c.zona, tel:c.tel||''
+  }, {onConflict:'id'});
+  if(error) { console.error('saveToDB_client:', error); showToast('Error guardando cliente','err'); }
 }
 
-// Guarda ruta en Supabase
 async function saveToDB_route(r) {
-  const { error } = await db.from('rutas').upsert({
-    id: r.id, uid: r.uid, zona: r.zona, alms: r.alms
-  });
-  if (error) showToast('Error guardando ruta', 'err');
+  const {error} = await db.from('rutas').upsert({
+    id:r.id, uid:r.uid, zona:r.zona, alms:r.alms
+  }, {onConflict:'id'});
+  if(error) { console.error('saveToDB_route:', error); showToast('Error guardando ruta','err'); }
 }
 
-// Borra ruta de Supabase
 async function deleteToDB_route(rid) {
-  await db.from('rutas').delete().eq('id', rid);
+  const {error} = await db.from('rutas').delete().eq('id', rid);
+  if(error) console.error('deleteToDB_route:', error);
 }
 
-// Guarda visita en Supabase
 async function saveToDB_visit(v) {
-  const { error } = await db.from('visitas').upsert({
-    id: v.id, uid: v.uid, cid: v.cid, cn: v.cn,
-    ca: v.ca, zona: v.zona, res: v.res, act: v.act,
-    obs: v.obs, status: v.status, elapsed: v.elapsed,
-    starttime: v.startTime, endtime: v.endTime
-  });
-  if (error) showToast('Error guardando visita', 'err');
+  const {error} = await db.from('visitas').upsert({
+    id:v.id, uid:v.uid, cid:v.cid||0, cn:v.cn, ca:v.ca||'',
+    zona:v.zona||'', res:v.res||'', act:v.act||'', obs:v.obs||'',
+    status:v.status, elapsed:v.elapsed||0,
+    starttime:v.startTime||null, endtime:v.endTime||null
+  }, {onConflict:'id'});
+  if(error) { console.error('saveToDB_visit:', error); showToast('Error guardando visita','err'); }
 }
 
-// ── SYNC EN TIEMPO REAL vía Supabase Realtime ──
+// ── SYNC EN TIEMPO REAL ──
 function startRealtimeSync() {
-  // Escucha cambios en visitas (usuario → supervisor)
-  db.channel('visitas-live')
-    .on('postgres_changes', { event: '*', schema: 'public', table: 'visitas' }, payload => {
-      const v = payload.new || payload.old;
-      if (!v) return;
-      if (payload.eventType === 'DELETE') {
-        S.visits = S.visits.filter(x => x.id !== v.id);
-      } else {
-        const idx = S.visits.findIndex(x => x.id === v.id);
-        const mapped = { id:v.id, uid:v.uid, cid:v.cid, cn:v.cn, ca:v.ca,
-          zona:v.zona, res:v.res, act:v.act, obs:v.obs,
-          status:v.status, elapsed:v.elapsed||0,
-          startTime:v.starttime, endTime:v.endtime, ts:null };
-        if (idx >= 0) S.visits[idx] = { ...S.visits[idx], ...mapped };
-        else S.visits.push(mapped);
-      }
-      // Actualiza UI si el dashboard está visible
-      if (document.getElementById('s-dash').classList.contains('active')) renderDash();
-      if (document.getElementById('s-user').classList.contains('active')) renderUP();
-      // Indicador visual de sincronización
-      showSyncPulse();
-    })
-    .subscribe();
+  if (_realtimeStarted) return;
+  _realtimeStarted = true;
 
-  // Escucha cambios en usuarios (estado online)
-  db.channel('usuarios-live')
-    .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'usuarios' }, payload => {
-      const u = payload.new;
-      const local = S.users.find(x => x.id === u.id);
-      if (local) Object.assign(local, { nom:u.nom, usr:u.usr, zona:u.zona, rol:u.rol });
-      if (document.getElementById('s-dash').classList.contains('active')) renderDash();
-    })
-    .subscribe();
+  // Canal de visitas — usuario → supervisor en tiempo real
+  db.channel('sync-visitas')
+    .on('postgres_changes',
+      { event: '*', schema: 'public', table: 'visitas' },
+      payload => {
+        console.log('🔴 Realtime visita:', payload.eventType, payload.new);
+        const v = payload.new || payload.old;
+        if (!v) return;
+
+        if (payload.eventType === 'DELETE') {
+          S.visits = S.visits.filter(x => x.id !== v.id);
+        } else {
+          const mapped = {
+            id:v.id, uid:v.uid, cid:v.cid, cn:v.cn, ca:v.ca,
+            zona:v.zona, res:v.res, act:v.act, obs:v.obs,
+            status:v.status, elapsed:v.elapsed||0,
+            startTime:v.starttime, endTime:v.endtime, ts:null
+          };
+          const idx = S.visits.findIndex(x => x.id === v.id);
+          if (idx >= 0) Object.assign(S.visits[idx], mapped);
+          else S.visits.push(mapped);
+        }
+        // Refrescar UI
+        if (document.getElementById('s-dash').classList.contains('active')) renderDash();
+        if (document.getElementById('s-user').classList.contains('active')) renderUP();
+        showSyncPulse();
+      }
+    )
+    .subscribe(status => {
+      console.log('Canal visitas:', status);
+      if (status === 'SUBSCRIBED') showSyncPulse();
+    });
+
+  // Canal de usuarios — estado online
+  db.channel('sync-usuarios')
+    .on('postgres_changes',
+      { event: 'UPDATE', schema: 'public', table: 'usuarios' },
+      payload => {
+        console.log('🟢 Realtime usuario:', payload.new);
+        const u = payload.new;
+        const local = S.users.find(x => x.id === u.id);
+        if (local) {
+          local.nom = u.nom; local.zona = u.zona; local.rol = u.rol;
+          local.online = u.online || false;
+        }
+        if (document.getElementById('s-dash').classList.contains('active')) renderDash();
+        showSyncPulse();
+      }
+    )
+    .subscribe(status => console.log('Canal usuarios:', status));
 }
 
 function showSyncPulse() {
@@ -859,7 +884,7 @@ function showSyncPulse() {
   if (!el) return;
   el.style.opacity = '1';
   clearTimeout(el._t);
-  el._t = setTimeout(() => { el.style.opacity = '0'; }, 2000);
+  el._t = setTimeout(() => { el.style.opacity = '0'; }, 2500);
 }
 
 // ════════════════════════════════════════
