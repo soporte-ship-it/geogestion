@@ -749,7 +749,7 @@ body.sup-mode .phone-frame{width:100%;min-height:100vh;border-radius:0;box-shado
 // ════════════════════════════════════════
 //  SUPABASE CONFIG
 // ════════════════════════════════════════
-const SUPA_URL = 'https://sxkizjpgazczdkiageal.supabase.co';
+const SUPA_URL = 'https://phvqysteqvvpirkokvvg.supabase.co';
 const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBodnF5c3RlcXZ2cGlya29rdnZnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQyOTcxMzQsImV4cCI6MjA4OTg3MzEzNH0.KDGojBxGNG1MxURHTJVxOty9jjABQYkv451-o-EY7SA';
 const db = supabase.createClient(SUPA_URL, SUPA_KEY, {
   realtime: { params: { eventsPerSecond: 10 } }
@@ -768,7 +768,12 @@ async function loadFromDB() {
       db.from('visitas').select('*'),
     ]);
 
-    if (r1.error) throw r1.error;
+    // Mostrar errores detallados en consola
+    [['usuarios',r1],['clientes',r2],['rutas',r3],['visitas',r4]].forEach(([t,r])=>{
+      if(r.error) console.error(`❌ Error en tabla ${t}:`, JSON.stringify(r.error));
+    });
+
+    if (r1.error) throw new Error('usuarios: ' + (r1.error.message || r1.error.hint || JSON.stringify(r1.error)));
 
     if (r1.data?.length) S.users   = r1.data.map(u=>({...u, online:u.online||false, loginTime:null, store:null}));
     if (r2.data?.length) S.clients = r2.data;
@@ -778,8 +783,9 @@ async function loadFromDB() {
     showToast('✓ Datos cargados — ' + (r1.data?.length||0) + ' usuarios');
     startRealtimeSync();
   } catch(e) {
-    console.error('Supabase error:', e);
-    showToast('⚠️ Sin conexión — modo local', 'err');
+    const msg = e?.message || e?.hint || (typeof e === 'object' ? JSON.stringify(e) : String(e));
+    console.error('❌ Supabase error:', msg, e);
+    showToast('⚠️ Sin conexión — ' + msg.slice(0,40), 'err');
   }
 }
 
